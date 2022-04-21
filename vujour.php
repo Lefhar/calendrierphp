@@ -45,6 +45,7 @@ function hex2rgb($hex)
 
     return $rgb;
 }
+
 ?>
 <html lang="fr">
 <head><title>Calendrier</title>
@@ -173,7 +174,7 @@ function hex2rgb($hex)
                                      echo 0;
                                  } ?>px; margin-left: <?= ($marginLeft > 0) ? $marginLeft * 134 : $marginLeft; ?>px; background-color: <?= $rowrdv['Couleur_TypeEvenement']; ?>;">
                                 <?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?>
-                                à <?= $heurefin; ?> <?= $rowrdv['Objet_Evenement']; ?> <?= $rowrdv['Contenu_Evenement']; ?>
+                                à <?= $heurefin; ?>  <?= (strlen($rowrdv['Objet_Evenement']) > 10) ? mb_substr($rowrdv['Objet_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Objet_Evenement']; ?>  <?= (strlen($rowrdv['Contenu_Evenement']) > 10) ? mb_substr($rowrdv['Contenu_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Contenu_Evenement']; ?>
                             </div>
                             <?php
                             $marginLeft++;
