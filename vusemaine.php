@@ -140,6 +140,10 @@ function hex2rgb($hex)
         }
         ?>
         <?php for ($heure = 0; $heure < 24; $heure++) {
+            $debH = DateTime::createFromFormat('H:i', ($heure < 10) ? '0' . $heure . ':00' : $heure . ':00');
+            $finH = DateTime::createFromFormat('H:i', ($heure < 10) ? '0' . $heure . ':59' : $heure . ':59');
+            $heuredebutTeste = $debH->format('H:i');
+            $heurefinTeste = $finH->format('H:i');
             ?>
 
             <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;">
@@ -147,14 +151,11 @@ function hex2rgb($hex)
             </div>
             <?php foreach ($tabjour as $key => $row) {
                 ?>
-                <div class="col-md-1 fw-bold border p-4 text-center"
+                <div class="col-md-1 fw-bold border p-0"
                      style="width: 12.8571%;">
 
                     <?php
-                    $debH = DateTime::createFromFormat('H:i', ($heure < 10) ? '0' . $heure . ':00' : $heure . ':00');
-                    $finH = DateTime::createFromFormat('H:i', ($heure < 10) ? '0' . $heure . ':59' : $heure . ':59');
-                    $heuredebutTeste = $debH->format('H:i');
-                    $heurefinTeste = $finH->format('H:i');
+
                     foreach ($dateRdv as $rowrdv) {
                         $debut = DateTime::createFromFormat('Y-m-d H:i:s', $rowrdv['Datedebut_Evenement']);
                         $fin = DateTime::createFromFormat('Y-m-d H:i:s', $rowrdv['Datefin_Evenement']);
@@ -164,7 +165,22 @@ function hex2rgb($hex)
                         if (date('Y-m-d', strtotime($rowrdv['Datedebut_Evenement'])) <= $row and date('Y-m-d', strtotime($rowrdv['Datefin_Evenement'])) >= $row) {
 
                             if ($heuredebut >= $heuredebutTeste and $heuredebut <= $heurefinTeste) { ?>
+                                <div title="<?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?> à <?= $heurefin; ?> <?= $rowrdv['Nom_TypeEvenement']; ?>"
+                                     class="badge rdv  eve<?= $rowrdv['Id_TypeEvenement']; ?>"
+                                     style="<?= hex2rgb($rowrdv['Couleur_TypeEvenement']); ?>height:
+                                     <?php if ($diff->format('%h') > 0) {
+                                         echo (int)$diff->format('%h') * 74;
+                                     } else {
+                                         echo 45;
 
+                                     } ?>px;margin-top: <?php if ($debut->format('i') > 0) {
+                                         echo $debut->format('i');
+                                     } else {
+                                         echo 0;
+                                     } ?>px;  background-color: <?= $rowrdv['Couleur_TypeEvenement']; ?>; display: block;">
+                                    <?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?>
+                                    à <?= $heurefin; ?>  <?= (strlen($rowrdv['Objet_Evenement']) > 10) ? mb_substr($rowrdv['Objet_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Objet_Evenement']; ?>  <?= (strlen($rowrdv['Contenu_Evenement']) > 10) ? mb_substr($rowrdv['Contenu_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Contenu_Evenement']; ?>
+                                </div>
                                 <?= $row; ?>
                                 <?php
                             }
@@ -185,6 +201,41 @@ function hex2rgb($hex)
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        <?php foreach ($dateRdv as $key => $rowcheck) { ?>
+        $("input[id='check<?=$key;?>']").click(function () {
+
+            if ($("input[id='check<?=$key;?>']:checked").val() == "yes") {
+                let elems = document.getElementsByClassName('eve<?= $rowcheck['Id_TypeEvenement']; ?>');
+                for (var i = 0; i < elems.length; i += 1) {
+                    elems[i].style.display = 'block';
+                }
+
+
+                //une case est coché dans les checkbox on désactive disabled sur le bouton delete_file
+                console.log('coché')
+            } else {
+                let elems = document.getElementsByClassName('eve<?= $rowcheck['Id_TypeEvenement']; ?>');
+                for (let i = 0; i < elems.length; i += 1) {
+                    elems[i].style.display = 'none';
+
+                }
+                console.log('non coché')
+
+
+            }
+
+        });
+
+        <?php
+        } ?>
+    });
+
+</script>
 
 </body>
 </html>
