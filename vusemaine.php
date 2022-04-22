@@ -81,45 +81,54 @@ function hex2rgb($hex)
 <body>
 <div class="container">
     <div class="row">
+        <div class="col-md-12 border text-center p-4">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-dark ">
+                    <a class="nav-link text-light fw-bold"
+                       href="vujour.php?d=<?= (int)date('d', strtotime(date($dateLundi))); ?>&y=<?= $year; ?>&m=<?= (int)date('m', strtotime($dateLundi)); ?>">Jour</a>
+                </label>
+                <label class="btn btn-info active">
+                    <a class="nav-link text-light fw-bold"
+                       href="#">Semaine</a>
+                </label>
+                <label class="btn btn-dark">
+                    <a class="nav-link text-light fw-bold"
+                       href="vumois.php?mois=<?= (int)date('m', strtotime($dateLundi)); ?>&annee=<?= $year; ?>">Mois</a>
+                </label>
 
+            </div>
+        </div>
+        <div class="col-md-12 border text-center  p-4"><a class="btn btn-dark fw-bold"
+                                                          href="vusemaine.php?w=1&y=<?= $year - 1; ?>"><</a>&nbsp;&nbsp;<?php echo $year; ?>
+            &nbsp;&nbsp;
+            <a class="btn btn-dark" href="vusemaine.php?w=1&amp;y=<?php echo $year + 1; ?>">></a>
+        </div>
+        <div class="col-md-12 border  p-4">
+            <div class="text-center p-10">
+                <a class="btn btn-dark fw-bold"
+                   href="vusemaine.php?w=<?= (int)date('W', strtotime("-7 day", strtotime($dateLundi))); ?>&amp;y=<?= (int)date('Y', strtotime("-7 day", strtotime($dateLundi))); ?>"><</a>
+                &nbsp;&nbsp;
+                <div class="btn btn-light w-25 fw-bold"> Du <?= $dateLundiLettre; ?>
+                    au <?= $dateVendrediLettre; ?></div>
+                &nbsp;&nbsp;<a class="btn btn-dark fw-bold"
+                               href="vusemaine.php?w=<?= (int)date('W', strtotime("+7 day", strtotime($dateLundi))); ?>&amp;y=<?= date('Y', strtotime("+7 day", strtotime($dateLundi))); ?>">></a>
+            </div>
+        </div>
+        <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;">
+            Heure
+        </div>
+        <?php
+        foreach ($tabjour as $key => $row) {
+            ?>
+            <div class="col-md-1 fw-bold border p-4 text-center"
+                 style="width: 12.8571%;"><?= $tabjourLettre[$key]; ?> <?= date('d', strtotime($row)); ?></div>
+
+
+            <?php
+        }
+        ?>
         <table class="table table-bordered">
-            <tr>
-                <td colspan="8" class="text-center">
 
-                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-dark ">
-                            <a class="nav-link text-light fw-bold"
-                               href="vujour.php?d=<?= (int)date('d', strtotime(date($dateLundi))); ?>&y=<?= $year; ?>&m=<?= (int)date('m', strtotime($dateLundi)); ?>">Jour</a>
-                        </label>
-                        <label class="btn btn-info active">
-                            <a class="nav-link text-light fw-bold" href="#">Semaine</a>
-                        </label>
-                        <label class="btn btn-dark">
-                            <a class="nav-link text-light fw-bold"
-                               href="vumois.php?mois=<?= (int)date('m', strtotime($dateLundi)); ?>&annee=<?= $year; ?>">Mois</a>
-                        </label>
-
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="8" class="text-center"><a class="btn btn-dark fw-bold"
-                                                       href="vusemaine.php?w=1&amp;y=<?= $year - 1; ?>"><</a>&nbsp;&nbsp;<?php echo $year; ?>
-                    &nbsp;&nbsp;
-                    <a class="btn btn-dark" href="vusemaine.php?w=1&amp;y=<?php echo $year + 1; ?>">></a>
-                </td>
-            </tr>
-
-            <tr>
-                <td colspan="8" class="text-center"><a class="btn btn-dark fw-bold"
-                                                       href="vusemaine.php?w=<?= (int)date('W', strtotime("-7 day", strtotime($dateLundi))); ?>&amp;y=<?= (int)date('Y', strtotime("-7 day", strtotime($dateLundi))); ?>"><</a>
-                    &nbsp;&nbsp;
-                    <div class="btn btn-light w-25 fw-bold">Du <?= $dateLundiLettre; ?>
-                        au <?= $dateVendrediLettre; ?></div>
-                    &nbsp;&nbsp;<a class="btn btn-dark fw-bold"
-                                   href="vusemaine.php?w=<?= (int)date('W', strtotime("+7 day", strtotime($dateLundi))); ?>&amp;y=<?= date('Y', strtotime("+7 day", strtotime($dateLundi))); ?>">></a>
-                </td>
-            </tr>
 
             <tr>
                 <th>Heures</th>

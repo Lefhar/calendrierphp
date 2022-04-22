@@ -100,9 +100,9 @@ function hex2rgb($hex)
             </div>
         </div>
         <div class="col-md-12 border text-center  p-4"><a class="btn btn-dark fw-bold"
-                                                          href="vusemaine.php?w=1&amp;y=<?= $year - 1; ?>"><</a>&nbsp;&nbsp;<?php echo $year; ?>
+                                                          href="vujour.php?d=<?= $day; ?>&m=<?= $month; ?>&y=<?= $year - 1; ?>"><</a>&nbsp;&nbsp;<?php echo $year; ?>
             &nbsp;&nbsp;
-            <a class="btn btn-dark" href="vusemaine.php?w=1&amp;y=<?php echo $year + 1; ?>">></a>
+            <a class="btn btn-dark" href="vujour.php?d=<?= $day; ?>&m=<?= $month; ?>&y=<?php echo $year + 1; ?>">></a>
         </div>
         <div class="col-md-12 border text-center  p-4">
 
