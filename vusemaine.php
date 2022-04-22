@@ -114,6 +114,18 @@ function hex2rgb($hex)
                                href="vusemaine.php?w=<?= (int)date('W', strtotime("+7 day", strtotime($dateLundi))); ?>&amp;y=<?= date('Y', strtotime("+7 day", strtotime($dateLundi))); ?>">></a>
             </div>
         </div>
+        <div class="col-md-12 border text-center  p-4">
+
+            <?php foreach ($dateRdv as $key => $rowcheck) { ?>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="check<?= $key; ?>" checked value="yes">
+                    <label class="form-check-label"
+                           for="check<?= $key; ?>"><?= $rowcheck['Nom_TypeEvenement']; ?></label>
+
+                </div>
+                <?php
+            } ?>
+        </div>
         <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;">
             Heure
         </div>
@@ -127,38 +139,47 @@ function hex2rgb($hex)
             <?php
         }
         ?>
-        <table class="table table-bordered">
+        <?php for ($heure = 0; $heure < 24; $heure++) {
+            ?>
 
-
-            <tr>
-                <th>Heures</th>
-                <?php
-                foreach ($tabjour as $key => $row) {
-                    ?>
-                    <th><?= $tabjourLettre[$key]; ?> <?= date('d', strtotime($row)); ?></th>
-
+            <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;">
+                <?= ($heure < 10) ? '0' . $heure : $heure; ?>H
+            </div>
+            <?php foreach ($tabjour as $key => $row) {
+                ?>
+                <div class="col-md-1 fw-bold border p-4 text-center"
+                     style="width: 12.8571%;">
 
                     <?php
-                }
-                ?>
-            </tr>
+                    $debH = DateTime::createFromFormat('H:i', ($heure < 10) ? '0' . $heure . ':00' : $heure . ':00');
+                    $finH = DateTime::createFromFormat('H:i', ($heure < 10) ? '0' . $heure . ':59' : $heure . ':59');
+                    $heuredebutTeste = $debH->format('H:i');
+                    $heurefinTeste = $finH->format('H:i');
+                    foreach ($dateRdv as $rowrdv) {
+                        $debut = DateTime::createFromFormat('Y-m-d H:i:s', $rowrdv['Datedebut_Evenement']);
+                        $fin = DateTime::createFromFormat('Y-m-d H:i:s', $rowrdv['Datefin_Evenement']);
+                        $diff = $debut->diff($fin);
+                        $heuredebut = $debut->format('H:i');
+                        $heurefin = $fin->format('H:i');
+                        if (date('Y-m-d', strtotime($rowrdv['Datedebut_Evenement'])) <= $row and date('Y-m-d', strtotime($rowrdv['Datefin_Evenement'])) >= $row) {
 
-            <?php for ($heure = 0; $heure < 24; $heure++) {
-                ?>
-                <tr class="calendar">
-                    <th> <?= ($heure < 10) ? '0' . $heure : $heure; ?>H</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <?php
-            }
-            ?>
-        </table>
+                            if ($heuredebut >= $heuredebutTeste and $heuredebut <= $heurefinTeste) { ?>
+
+                                <?= $row; ?>
+                                <?php
+                            }
+                        }
+                    }
+                    ?>
+                </div>
+
+            <?php } ?>
+
+
+            <?php
+        }
+        ?>
+
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
