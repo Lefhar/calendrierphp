@@ -137,7 +137,7 @@ function hex2rgb($hex)
         for ($heure = 00; $heure < 24; $heure++) {
             ?>
             <div class="col-md-2 border text-center fw-bold p-4"> <?= ($heure < 10) ? '0' . $heure : $heure; ?>H</div>
-            <div class="col-md-10 border">
+            <div class="col-md-10 border p-0">
                 <?php
                 $debH = DateTime::createFromFormat('H:i', ($heure < 10) ? '0' . $heure . ':00' : $heure . ':00');
                 $finH = DateTime::createFromFormat('H:i', ($heure < 10) ? '0' . $heure . ':59' : $heure . ':59');
@@ -162,17 +162,8 @@ function hex2rgb($hex)
                             ?>
                             <div title="<?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?> à <?= $heurefin; ?> <?= $rowrdv['Nom_TypeEvenement']; ?>"
                                  class="badge rdv  eve<?= $rowrdv['Id_TypeEvenement']; ?>"
-                                 style="<?= hex2rgb($rowrdv['Couleur_TypeEvenement']); ?>height:
-                                 <?php if ($diff->format('%h') > 0) {
-                                     echo (int)$diff->format('%h') * 74;
-                                 } else {
-                                     echo 45;
-
-                                 } ?>px;margin-top: <?php if ($debut->format('i') > 0) {
-                                     echo $debut->format('i');
-                                 } else {
-                                     echo 0;
-                                 } ?>px; margin-left: <?= ($marginLeft > 0) ? $marginLeft * 134 : $marginLeft; ?>px; background-color: <?= $rowrdv['Couleur_TypeEvenement']; ?>;">
+                                 style="<?= hex2rgb($rowrdv['Couleur_TypeEvenement']); ?><?= ($diff->format('%h') > 0) ? 'height:' . ((int)$diff->format('%h') * 74) . 'px;' : '' ?>
+                                 <?= ($debut->format('i') > 0) ? 'margin-top:' . $debut->format('i') . 'px;' : '' ?> margin-left: <?= ($marginLeft > 0) ? $marginLeft * 128 : $marginLeft; ?>px; background-color: <?= $rowrdv['Couleur_TypeEvenement']; ?>;">
                                 <?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?>
                                 à <?= $heurefin; ?>  <?= (strlen($rowrdv['Objet_Evenement']) > 10) ? mb_substr($rowrdv['Objet_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Objet_Evenement']; ?>  <?= (strlen($rowrdv['Contenu_Evenement']) > 10) ? mb_substr($rowrdv['Contenu_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Contenu_Evenement']; ?>
                             </div>

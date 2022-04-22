@@ -1,14 +1,9 @@
 <?php
 include("db.php");
-$db = Database::connect();
-$idclient = 1;
 // Récuperation des variables passées, on donne soit année; mois; année+mois
 if (!isset($_GET['mois'])) $num_mois = date("n"); else $num_mois = $_GET['mois'];
 if (!isset($_GET['annee'])) $num_an = date("Y"); else $num_an = $_GET['annee'];
 
-$reqjour = $db->prepare('select * from evenement join typeevenement t on evenement.Id_TypeEvenement = t.Id_TypeEvenement where MONTH(Datedebut_Evenement)=? and year (Datedebut_Evenement)=?  and Id_Client=?');
-$reqjour->execute(array($num_mois, $num_an, $idclient));
-$dateRdv = $reqjour->fetchAll();
 // pour pas s'embeter a les calculer a l'affchage des fleches de navigation...
 if ($num_mois < 1) {
     $num_mois = 12;
@@ -17,7 +12,6 @@ if ($num_mois < 1) {
     $num_mois = 1;
     $num_an = $num_an + 1;
 }
-
 
 // nombre de jours dans le mois et numero du premier jour du mois
 //$int_nbj = date("t", mktime(0,0,0,$num_mois,1,$num_an));
@@ -37,23 +31,23 @@ $tab_cal = array(array(), array(), array(), array(), array(), array()); // tab_c
 $int_premj = ($int_premj == 0) ? 7 : $int_premj;
 $t = 1;
 $p = "";
-//for ($ligne = 0; $ligne < 6; $ligne++) {
-//    for ($j = 0; $j < 7; $j++) {
-//        if ($j + 1 == $int_premj && $t == 1) {
-//            $tab_cal[$ligne][$j] = $t;
-//            $t++; // on stocke le premier jour du mois
-//        } elseif ($t > 1 && $t <= $int_nbj) {
-//            $tab_cal[$ligne][$j] = $p . $t;
-//            $t++;  // on incremente a chaque fois...
-//        } elseif ($t > $int_nbj) {
-//            $p = "*";
-//            $tab_cal[$ligne][$j] = $p . "1";
-//            $t = 2;// on a mis tout les numeros de ce mois, on commence a mettre ceux du suivant
-//        } elseif ($t == 1) {
-//            $tab_cal[$ligne][$j] = "*" . ($int_nbjAV - ($int_premj - ($j + 1)) + 1); // on a pas encore mis les num du mois, on met ceux de celui d'avant
-//        }
-//    }
-//}
+for ($i = 0; $i < 6; $i++) {
+    for ($j = 0; $j < 7; $j++) {
+        if ($j + 1 == $int_premj && $t == 1) {
+            $tab_cal[$i][$j] = $t;
+            $t++; // on stocke le premier jour du mois
+        } elseif ($t > 1 && $t <= $int_nbj) {
+            $tab_cal[$i][$j] = $p . $t;
+            $t++;  // on incremente a chaque fois...
+        } elseif ($t > $int_nbj) {
+            $p = "*";
+            $tab_cal[$i][$j] = $p . "1";
+            $t = 2;// on a mis tout les numeros de ce mois, on commence a mettre ceux du suivant
+        } elseif ($t == 1) {
+            $tab_cal[$i][$j] = "*" . ($int_nbjAV - ($int_premj - ($j + 1)) + 1); // on a pas encore mis les num du mois, on met ceux de celui d'avant
+        }
+    }
+}
 $month = ($num_mois <= 9) ? '0' . $num_mois : $num_mois;
 $dateactuel = $num_an . "-" . $month . "-01";
 $semaine = date('W', strtotime($dateactuel));
@@ -61,47 +55,17 @@ if ($semaine > 52) {
     $semaine = 01;
 }
 $tabsemaine = array();
-for ($ligne = 0; $ligne < 6; $ligne++) {
+for ($i = 0; $i < 6; $i++) {
     // $tabligne[$semaine]=$semaine;
     $tabsemaine[$semaine] = array();
-    $moic = 0;
-    //  $key = 0;
-    for ($jour = 0; $jour < 7; $jour++) {
-
-
-        if ($jour + 1 == $int_premj && $t == 1) {
-            $tab_cal[$ligne][$jour] = (($num_mois < 10) ? "0" . ($num_mois) : $num_mois) . "-" . (($t < 10) ? "0" . $t : $t);// on stocke le premier jour du mois
-            $t++;
-        } elseif ($t > 1 && $t <= $int_nbj && $ligne != 5) {
-            $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois < 10) ? "0" . ($num_mois) : $num_mois) . "-" . (($t < 10) ? "0" . $t : $t);
-            $t++;  // on incremente a chaque fois...
-        } elseif ($t > 1 && $t <= $int_nbj) {
-            $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois + 1 < 10) ? "0" . ($num_mois + 1) : $num_mois + 1) . "-" . (($t < 10) ? "0" . $t : $t);
-            $t++;  // on incremente a chaque fois...
-
-
-        } elseif ($t > $int_nbj) {
-            $p = (($num_mois < 10) ? "0" . ($num_mois + 1) : $num_mois + 1) . "-";
-            $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois + 1 < 10) ? "0" . ($num_mois + 1) : $num_mois + 1) . "-01";
-            $t = 2;// on a mis tout les numeros de ce mois, on commence a mettre ceux du suivant
-
-            // $t = 2;// on a mis tout les numeros de ce mois, on commence a mettre ceux du suivant
-        } elseif ($t = 1) {
-            $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois - 1 < 10) ? "0" . ($num_mois - 1) : $num_mois - 1) . "-" . ($int_nbjAV - ($int_premj - ($jour + 1)) + 1); // on a pas encore mis les num du mois, on met ceux de celui d'avant
-        }
-        
-        echo $tab_cal[$ligne][$jour] . "<br>";
-        // $tab_cal[$i][$j]=  str_replace("*", "", $tab_cal[$i][$j]);
-        //     echo "".$tab_cal[$i][$j]."-".($moic+1)."-".$num_an;
-        //  echo "<br>";
-        //        echo (($tab_cal[$i][$j]<10)?'0'.$tab_cal[$i][$j]:$tab_cal[$i][$j])."-".(($moic<10)?'0'.$moic:$moic)."-".$num_an;
-        //  $tabsemaine[$semaine][] = $tab_cal[$i][$j];
-        //  $key++;
+    $key = 0;
+    for ($j = 0; $j < 7; $j++) {
+        $tabsemaine[$semaine][] = $tab_cal[$i][$j];
+        $key++;
     }
     $semaine++;
 }
-//var_dump($tabsemaine);
-exit();
+var_dump($tabsemaine);
 ?>
 <html lang="fr">
 <head><title>Calendrier</title>

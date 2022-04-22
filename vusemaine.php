@@ -29,6 +29,12 @@ for ($i = 0; $i < 7; $i++) {
 $reqjour = $db->prepare('select * from evenement join typeevenement t on evenement.Id_TypeEvenement = t.Id_TypeEvenement where date(Datedebut_Evenement)>=? and date(Datedebut_Evenement)<=?  and Id_Client=?');
 $reqjour->execute(array($dateLundi, $dateVendredi, $idclient));
 $dateRdv = $reqjour->fetchAll();
+
+//fonction qui convertir les couleurs hex en Rgb pour l'adaptation de la coloration du texte dans les div
+/**
+ * @param $hex
+ * @return string
+ */
 function hex2rgb($hex)
 {
     $hex = str_replace("#", "", $hex);
@@ -53,11 +59,6 @@ function hex2rgb($hex)
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        .calendar {
-            line-height: 25px;
-            min-height: 25px;
-            height: 125px;
-        }
 
         .rdv {
             min-height: 45px;
@@ -139,7 +140,8 @@ function hex2rgb($hex)
             <?php
         }
         ?>
-        <?php for ($heure = 0; $heure < 24; $heure++) {
+        <?php
+        for ($heure = 0; $heure < 24; $heure++) {
             $debH = DateTime::createFromFormat('H:i', ($heure < 10) ? '0' . $heure . ':00' : $heure . ':00');
             $finH = DateTime::createFromFormat('H:i', ($heure < 10) ? '0' . $heure . ':59' : $heure . ':59');
             $heuredebutTeste = $debH->format('H:i');
@@ -167,21 +169,13 @@ function hex2rgb($hex)
                             if ($heuredebut >= $heuredebutTeste and $heuredebut <= $heurefinTeste) { ?>
                                 <div title="<?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?> à <?= $heurefin; ?> <?= $rowrdv['Nom_TypeEvenement']; ?>"
                                      class="badge rdv  eve<?= $rowrdv['Id_TypeEvenement']; ?>"
-                                     style="<?= hex2rgb($rowrdv['Couleur_TypeEvenement']); ?>height:
-                                     <?php if ($diff->format('%h') > 0) {
-                                         echo (int)$diff->format('%h') * 74;
-                                     } else {
-                                         echo 45;
-
-                                     } ?>px;margin-top: <?php if ($debut->format('i') > 0) {
-                                         echo $debut->format('i');
-                                     } else {
-                                         echo 0;
-                                     } ?>px;  background-color: <?= $rowrdv['Couleur_TypeEvenement']; ?>; display: block;">
+                                     style="<?= hex2rgb($rowrdv['Couleur_TypeEvenement']); ?>
+                                     <?= ($diff->format('%h') > 0) ? 'height:' . ((int)$diff->format('%h') * 74) . 'px;' : '' ?>
+                                     <?= ($debut->format('i') > 0) ? 'margin-top:' . $debut->format('i') . 'px;' : '' ?>
+                                             background-color: <?= $rowrdv['Couleur_TypeEvenement']; ?>; display: block;">
                                     <?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?>
                                     à <?= $heurefin; ?>  <?= (strlen($rowrdv['Objet_Evenement']) > 10) ? mb_substr($rowrdv['Objet_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Objet_Evenement']; ?>  <?= (strlen($rowrdv['Contenu_Evenement']) > 10) ? mb_substr($rowrdv['Contenu_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Contenu_Evenement']; ?>
                                 </div>
-                                <?= $row; ?>
                                 <?php
                             }
                         }
@@ -210,8 +204,8 @@ function hex2rgb($hex)
         $("input[id='check<?=$key;?>']").click(function () {
 
             if ($("input[id='check<?=$key;?>']:checked").val() == "yes") {
-                let elems = document.getElementsByClassName('eve<?= $rowcheck['Id_TypeEvenement']; ?>');
-                for (var i = 0; i < elems.length; i += 1) {
+                const elems = document.getElementsByClassName('eve<?= $rowcheck['Id_TypeEvenement']; ?>');
+                for (let i = 0; i < elems.length; i += 1) {
                     elems[i].style.display = 'block';
                 }
 
