@@ -64,43 +64,62 @@ $tabsemaine = array();
 for ($ligne = 0; $ligne < 6; $ligne++) {
     // $tabligne[$semaine]=$semaine;
     $tabsemaine[$semaine] = array();
-    $moic = 0;
-    //  $key = 0;
+
     for ($jour = 0; $jour < 7; $jour++) {
 
 
         if ($jour + 1 == $int_premj && $t == 1) {
-            $tab_cal[$ligne][$jour] = (($num_mois < 10) ? "0" . ($num_mois) : $num_mois) . "-" . (($t < 10) ? "0" . $t : $t);// on stocke le premier jour du mois
+            $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois < 10) ? "0" . ($num_mois) : $num_mois) . "-" . (($t < 10) ? "0" . $t : $t);// on stocke le premier jour du mois
             $t++;
         } elseif ($t > 1 && $t <= $int_nbj && $ligne != 5) {
             $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois < 10) ? "0" . ($num_mois) : $num_mois) . "-" . (($t < 10) ? "0" . $t : $t);
             $t++;  // on incremente a chaque fois...
         } elseif ($t > 1 && $t <= $int_nbj) {
-            $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois + 1 < 10) ? "0" . ($num_mois + 1) : $num_mois + 1) . "-" . (($t < 10) ? "0" . $t : $t);
+            if($num_mois+1>12){
+                $tab_cal[$ligne][$jour] = $num_an+1 . "-01-" . (($t < 10) ? "0" . $t : $t);
+
+            }else{
+                $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois + 1 < 10) ? "0" . ($num_mois + 1) : $num_mois + 1) . "-" . (($t < 10) ? "0" . $t : $t);
+
+            }
+
             $t++;  // on incremente a chaque fois...
 
 
         } elseif ($t > $int_nbj) {
             $p = (($num_mois < 10) ? "0" . ($num_mois + 1) : $num_mois + 1) . "-";
-            $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois + 1 < 10) ? "0" . ($num_mois + 1) : $num_mois + 1) . "-01";
+                if($num_mois+1>12){
+                    $tab_cal[$ligne][$jour] = $num_an+1 . "-01-01";
+
+                }else{
+                    $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois + 1 < 10) ? "0" . ($num_mois + 1) : $num_mois + 1) . "-01";
+
+                }
             $t = 2;// on a mis tout les numeros de ce mois, on commence a mettre ceux du suivant
 
             // $t = 2;// on a mis tout les numeros de ce mois, on commence a mettre ceux du suivant
         } elseif ($t = 1) {
-            $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois - 1 < 10) ? "0" . ($num_mois - 1) : $num_mois - 1) . "-" . ($int_nbjAV - ($int_premj - ($jour + 1)) + 1); // on a pas encore mis les num du mois, on met ceux de celui d'avant
+            if($num_mois-1==0){
+                $tab_cal[$ligne][$jour] = $num_an-1 . "-12-" . ($int_nbjAV - ($int_premj - ($jour + 1)) + 1); // on a pas encore mis les num du mois, on met ceux de celui d'avant
+
+            }else{
+                $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois - 1 < 10) ? "0" . ($num_mois - 1) : $num_mois - 1) . "-" . ($int_nbjAV - ($int_premj - ($jour + 1)) + 1); // on a pas encore mis les num du mois, on met ceux de celui d'avant
+
+            }
         }
         
-        echo $tab_cal[$ligne][$jour] . "<br>";
+       // echo $tab_cal[$ligne][$jour] . "<br>";
         // $tab_cal[$i][$j]=  str_replace("*", "", $tab_cal[$i][$j]);
         //     echo "".$tab_cal[$i][$j]."-".($moic+1)."-".$num_an;
         //  echo "<br>";
         //        echo (($tab_cal[$i][$j]<10)?'0'.$tab_cal[$i][$j]:$tab_cal[$i][$j])."-".(($moic<10)?'0'.$moic:$moic)."-".$num_an;
-        //  $tabsemaine[$semaine][] = $tab_cal[$i][$j];
+        $semaine = date('W',strtotime($tab_cal[$ligne][$jour]));
+     $tabsemaine[$semaine][] = $tab_cal[$ligne][$jour];
         //  $key++;
     }
-    $semaine++;
+    //$semaine++;
 }
-//var_dump($tabsemaine);
+var_dump($tabsemaine);
 exit();
 ?>
 <html lang="fr">
