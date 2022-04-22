@@ -108,13 +108,15 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
             }
         }
         
-       // echo $tab_cal[$ligne][$jour] . "<br>";
+        echo 'semaine '.(int)date('W',strtotime($tab_cal[$ligne][$jour])).''.$tab_cal[$ligne][$jour] . "<br>";
         // $tab_cal[$i][$j]=  str_replace("*", "", $tab_cal[$i][$j]);
         //     echo "".$tab_cal[$i][$j]."-".($moic+1)."-".$num_an;
         //  echo "<br>";
         //        echo (($tab_cal[$i][$j]<10)?'0'.$tab_cal[$i][$j]:$tab_cal[$i][$j])."-".(($moic<10)?'0'.$moic:$moic)."-".$num_an;
-        $semaine = date('W',strtotime($tab_cal[$ligne][$jour]));
-     $tabsemaine[$semaine][] = $tab_cal[$ligne][$jour];
+//        echo date('W',strtotime($tab_cal[$ligne][$jour]));
+//        echo "<br>";
+        //$semaine = ;
+     $tabsemaine[(int)date('W',strtotime($tab_cal[$ligne][$jour]))][] = $tab_cal[$ligne][$jour];
         //  $key++;
     }
     //$semaine++;
