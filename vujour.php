@@ -2,19 +2,19 @@
 include("db.php");
 $db = Database::connect();
 if (empty($_GET['d'])) {
-    $day = date('d', strtotime(date('d')));
+    $day = date('d', strtotime(date('Y-m-d')));
 } else {
     $day = ($_GET['d'] < 10) ? '0' . $_GET['d'] : $_GET['d'];
 
 }
 if (empty($_GET['m'])) {
-    $month = date('m', strtotime(date('m')));
+    $month = date('m', strtotime(date('Y-m-d')));
 } else {
     $month = ($_GET['m'] < 10) ? '0' . $_GET['m'] : $_GET['m'];
 
 }
 if (empty($_GET['y'])) {
-    $year = date('Y', strtotime(date('Y')));
+    $year = date('Y', strtotime(date('Y-m-d')));
 } else {
     $year = $_GET['y'];
 
