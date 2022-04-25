@@ -29,6 +29,10 @@ $reqjour = $db->prepare('select * from evenement join typeevenement t on eveneme
 $reqjour->execute(array($year, $month, $year, $month, $idclient));
 $dateRdv = $reqjour->fetchAll();
 
+$reqeve = $db->prepare('select * from typeevenement where Id_Client=? order by Nom_TypeEvenement asc');
+$reqeve->execute(array($idclient));
+$TypeEve = $reqeve->fetchAll();
+
 function hex2rgb($hex)
 {
     $hex = str_replace("#", "", $hex);

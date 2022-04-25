@@ -29,7 +29,9 @@ for ($i = 0; $i < 7; $i++) {
 $reqjour = $db->prepare('select * from evenement join typeevenement t on evenement.Id_TypeEvenement = t.Id_TypeEvenement where date(Datedebut_Evenement)>=? and date(Datedebut_Evenement)<=?  and Id_Client=?');
 $reqjour->execute(array($dateLundi, $dateVendredi, $idclient));
 $dateRdv = $reqjour->fetchAll();
-
+$reqeve = $db->prepare('select * from typeevenement where Id_Client=? order by Nom_TypeEvenement asc');
+$reqeve->execute(array($idclient));
+$TypeEve = $reqeve->fetchAll();
 //fonction qui convertir les couleurs hex en Rgb pour l'adaptation de la coloration du texte dans les div
 /**
  * @param $hex

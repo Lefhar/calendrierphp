@@ -9,6 +9,10 @@ if (!isset($_GET['annee'])) $num_an = date("Y"); else $num_an = $_GET['annee'];
 $reqjour = $db->prepare('select * from evenement join typeevenement t on evenement.Id_TypeEvenement = t.Id_TypeEvenement where MONTH(Datedebut_Evenement)=? and year (Datedebut_Evenement)=?  and Id_Client=?');
 $reqjour->execute(array($num_mois, $num_an, $idclient));
 $dateRdv = $reqjour->fetchAll();
+
+$reqeve = $db->prepare('select * from typeevenement where Id_Client=? order by Nom_TypeEvenement asc');
+$reqeve->execute(array($idclient));
+$TypeEve = $reqeve->fetchAll();
 // pour pas s'embeter a les calculer a l'affchage des fleches de navigation...
 if ($num_mois < 1) {
     $num_mois = 12;
@@ -23,106 +27,49 @@ if ($num_mois < 1) {
 //$int_nbj = date("t", mktime(0,0,0,$num_mois,1,$num_an));
 $int_nbj = cal_days_in_month(CAL_GREGORIAN, $num_mois, $num_an);
 $int_premj = date("w", mktime(0, 0, 0, $num_mois, 1, $num_an));
-
 // tableau des jours, tableau des mois...
-$tab_jours = array("Semaine", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche");
-$tab_mois = array("Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre");
+$tab_jours = array("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche");
+$tab_mois = array("", "Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre");
 
 $int_nbjAV = cal_days_in_month(CAL_GREGORIAN, ($num_mois - 1 < 1) ? $num_mois : $num_mois - 1, $num_an); // nb de jours du mois d'avant
 
 $int_nbjAP = cal_days_in_month(CAL_GREGORIAN, ($num_mois + 1 > 12) ? 1 : $num_mois + 1, $num_an); // nb de jours du mois d'apres
 
 // on affiche les jours du mois et aussi les jours du mois avant/apres, on les indique par une * a l'affichage on modifie l'apparence des chiffres *
-$tab_cal = array(array(), array(), array(), array(), array(), array()); // tab_cal[Semaine][Jour de la semaine]
+//$tab_cal = array(array(), array(), array(), array(), array(), array()); // tab_cal[Semaine][Jour de la semaine]
+$tab_cal = array();
 $int_premj = ($int_premj == 0) ? 7 : $int_premj;
 $t = 1;
-$p = "";
-//for ($ligne = 0; $ligne < 6; $ligne++) {
-//    for ($j = 0; $j < 7; $j++) {
-//        if ($j + 1 == $int_premj && $t == 1) {
-//            $tab_cal[$ligne][$j] = $t;
-//            $t++; // on stocke le premier jour du mois
-//        } elseif ($t > 1 && $t <= $int_nbj) {
-//            $tab_cal[$ligne][$j] = $p . $t;
-//            $t++;  // on incremente a chaque fois...
-//        } elseif ($t > $int_nbj) {
-//            $p = "*";
-//            $tab_cal[$ligne][$j] = $p . "1";
-//            $t = 2;// on a mis tout les numeros de ce mois, on commence a mettre ceux du suivant
-//        } elseif ($t == 1) {
-//            $tab_cal[$ligne][$j] = "*" . ($int_nbjAV - ($int_premj - ($j + 1)) + 1); // on a pas encore mis les num du mois, on met ceux de celui d'avant
-//        }
-//    }
-//}
+
 $month = ($num_mois <= 9) ? '0' . $num_mois : $num_mois;
 $dateactuel = $num_an . "-" . $month . "-01";
-$semaine = date('W', strtotime($dateactuel));
-if ($semaine > 52) {
-    $semaine = 01;
-}
+//$semaine = (int)date('W', strtotime($dateactuel));
+//if ($semaine > 52) {
+//    $semaine = 01;
+//}
 $tabsemaine = array();
+$dateJour = date('Y-m-d', strtotime($num_an . '-' . $num_mois . '-01'));
+$numdebutcalendrier = date('Y-m-d', strtotime('last monday', strtotime($dateJour)));
+$currentWeek = (int)date('W', strtotime($dateJour));
+
+
+$demare = date('Y-m-d', strtotime('last monday', strtotime($dateJour)));
+
 for ($ligne = 0; $ligne < 6; $ligne++) {
-    // $tabligne[$semaine]=$semaine;
-    $tabsemaine[$semaine] = array();
+
 
     for ($jour = 0; $jour < 7; $jour++) {
 
 
-        if ($jour + 1 == $int_premj && $t == 1) {
-            $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois < 10) ? "0" . ($num_mois) : $num_mois) . "-" . (($t < 10) ? "0" . $t : $t);// on stocke le premier jour du mois
-            $t++;
-        } elseif ($t > 1 && $t <= $int_nbj && $ligne != 5) {
-            $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois < 10) ? "0" . ($num_mois) : $num_mois) . "-" . (($t < 10) ? "0" . $t : $t);
-            $t++;  // on incremente a chaque fois...
-        } elseif ($t > 1 && $t <= $int_nbj) {
-            if ($num_mois + 1 > 12) {
-                $tab_cal[$ligne][$jour] = $num_an + 1 . "-01-" . (($t < 10) ? "0" . $t : $t);
-
-            } else {
-                $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois + 1 < 10) ? "0" . ($num_mois + 1) : $num_mois + 1) . "-" . (($t < 10) ? "0" . $t : $t);
-
-            }
-
-            $t++;  // on incremente a chaque fois...
+        $tabsemaine[$ligne][(int)date('W', strtotime($demare))][] = $demare;
+        $demare = date("Y-m-d", strtotime($demare . '+ 1 days'));
 
 
-        } elseif ($t > $int_nbj) {
-            $p = (($num_mois < 10) ? "0" . ($num_mois + 1) : $num_mois + 1) . "-";
-            if ($num_mois + 1 > 12) {
-                $tab_cal[$ligne][$jour] = $num_an + 1 . "-01-01";
-
-            } else {
-                $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois + 1 < 10) ? "0" . ($num_mois + 1) : $num_mois + 1) . "-01";
-
-            }
-            $t = 2;// on a mis tout les numeros de ce mois, on commence a mettre ceux du suivant
-
-            // $t = 2;// on a mis tout les numeros de ce mois, on commence a mettre ceux du suivant
-        } elseif ($t = 1) {
-            if ($num_mois - 1 == 0) {
-                $tab_cal[$ligne][$jour] = $num_an - 1 . "-12-" . ($int_nbjAV - ($int_premj - ($jour + 1)) + 1); // on a pas encore mis les num du mois, on met ceux de celui d'avant
-
-            } else {
-                $tab_cal[$ligne][$jour] = $num_an . "-" . (($num_mois - 1 < 10) ? "0" . ($num_mois - 1) : $num_mois - 1) . "-" . ($int_nbjAV - ($int_premj - ($jour + 1)) + 1); // on a pas encore mis les num du mois, on met ceux de celui d'avant
-
-            }
-        }
-        $tabsemaine[$ligne][(int)date('W', strtotime($tab_cal[$ligne][$jour]))][] = $tab_cal[$ligne][$jour];
-
-        // echo 'semaine '.(int)date('W',strtotime($tab_cal[$ligne][$jour])).''.$tab_cal[$ligne][$jour] . "<br>";
-        // $tab_cal[$i][$j]=  str_replace("*", "", $tab_cal[$i][$j]);
-        //     echo "".$tab_cal[$i][$j]."-".($moic+1)."-".$num_an;
-        //  echo "<br>";
-        //        echo (($tab_cal[$i][$j]<10)?'0'.$tab_cal[$i][$j]:$tab_cal[$i][$j])."-".(($moic<10)?'0'.$moic:$moic)."-".$num_an;
-//        echo date('W',strtotime($tab_cal[$ligne][$jour]));
-//        echo "<br>";
-        //$semaine = ;
-        //  $key++;
     }
-    //$semaine++;
+
 }
+//var_dump($tab_cal);
 var_dump($tabsemaine);
-exit();
 ?>
 <html lang="fr">
 <head><title>Calendrier</title>
@@ -148,94 +95,82 @@ exit();
 <body>
 <div class="container">
     <div class="row">
-        <table class="table table-bordered">
-            <tr>
-                <td colspan="8" class="text-center">
+        <div class="col-md-12 border text-center p-4">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-dark ">
+                    <a class="nav-link text-light fw-bold" href="vujour.php?d=1&m=<?= $num_mois; ?>&y=<?= $num_an; ?>">Jour</a>
+                </label>
+                <label class="btn btn-dark ">
+                    <a class="nav-link text-light fw-bold"
+                       href="vusemaine.php?w=<?= date('W', strtotime($num_an . '-' . $num_mois . '-01')); ?>&y=<?= $num_an; ?>">Semaine</a>
+                </label>
+                <label class="btn btn-info active">
+                    <a class="nav-link text-light fw-bold"
+                       href="#">Mois</a>
+                </label>
 
-                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-dark ">
-                            <a class="nav-link text-light fw-bold" href="vujour.php">Jour</a>
-                        </label>
-                        <label class="btn btn-dark ">
-                            <a class="nav-link text-light fw-bold"
-                               href="vusemaine.php?w=<?= date('W', strtotime($num_an . '-' . $num_mois . '-01')); ?>&y=<?= $num_an; ?>">Semaine</a>
-                        </label>
-                        <label class="btn btn-info active">
-                            <a class="nav-link text-light fw-bold" href="#">Mois</a>
-                        </label>
+            </div>
+        </div>
+        <div class="col-md-12 border text-center  p-4"><a class="btn btn-dark fw-bold"
+                                                          href="vumois.php?mois=<?= $num_mois; ?>&annee=<?= $num_an - 1; ?>"><</a>&nbsp;&nbsp;<?php echo $num_an; ?>
+            &nbsp;&nbsp;
+            <a class="btn btn-dark" href="vumois.php?d=1&mois=<?= $num_mois; ?>&annee=<?php echo $num_an + 1; ?>">></a>
+        </div>
+        <div class="col-md-12 border text-center  p-4">
 
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="8" class="text-center"><a class="btn btn-dark fw-bold"
-                                                       href="vumois.php?mois=<?php echo $num_mois; ?>&amp;annee=<?php echo $num_an - 1; ?>"><</a>&nbsp;&nbsp;<?php echo $num_an; ?>
-                    &nbsp;&nbsp;<a class="btn btn-dark fw-bold"
-                                   href="vumois.php?mois=<?php echo $num_mois; ?>&amp;annee=<?php echo $num_an + 1; ?>">></a>
-                </td>
-            </tr>
+            <?php foreach ($TypeEve as $key => $rowcheck) { ?>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="check<?= $key; ?>" checked value="yes">
+                    <label class="form-check-label"
+                           for="check<?= $key; ?>"><?= $rowcheck['Nom_TypeEvenement']; ?></label>
 
-            <tr>
-                <td colspan="8" class="text-center">
-                    <a class="btn btn-dark fw-bold"
-                       href="vumois.php?mois=<?= ($num_mois - 1 == 0) ? 12 : $num_mois - 1; ?>
-&amp;annee=<?= ($num_mois - 1 == 0) ? $num_an - 1 : $num_an; ?>"><</a>
-                    <div class="btn btn-light w-25 fw-bold">&nbsp;&nbsp;<?php echo $tab_mois[$num_mois - 1]; ?></div>
-                    &nbsp;&nbsp;<a class="btn btn-dark fw-bold"
-                                   href="vumois.php?mois=<?= ($num_mois + 1 >= 12) ? 1 : $num_mois + 1; ?>&amp;annee=<?= ($num_mois + 1 >= 12) ? $num_an + 1 : $num_an; ?>">></a>
-                </td>
-            </tr>
-            <?php
-            echo '<tr>';
-            $month = ($num_mois <= 9) ? '0' . $num_mois : $_GET['mois'];
-            $dateactuel = $_GET['annee'] . "-" . $month . "-01";
-            $semaine = date('W', strtotime($dateactuel));
-
-            foreach ($tab_jours as $th) {
-                echo '<th>' . $th . '</th>';
+                </div>
+                <?php
             }
-            echo '</tr>';
-            for ($i = 0; $i < 6; $i++) {
 
-                echo "<tr class='calendar'>";
-
-                echo "<th class='semaine'>" . (int)$semaine . "</th>";
-                for ($j = 0; $j < 7; $j++) {
-
-
-                    if (strpos($tab_cal[$i][$j], "*") !== false) {
-                        $day = str_replace("*", "", $tab_cal[$i][$j]);
-                        if ($day < 23) {
-                            if ($num_mois + 1 == 13) {
-                                $moic = $tab_mois[1];
-
-                            } else {
-                                $moic = $tab_mois[$num_mois];
-
-                            }
-                        } else {
-                            if ($num_mois - 1 == 0) {
-                                $mois = 12;
-                            } else {
-                                $mois = $num_mois - 1;
-                            }
-                            $moic = $tab_mois[$mois - 1];
-
-                        }
-
-                    }
-                    echo "<td class='jour'  " . (($num_mois == date("n") && $num_an == date("Y") && $tab_cal[$i][$j] == date("j")) ? ' style="color: #ffffff; background-color: #c1bbbb;"' : null) . ">
-            " . ((strpos($tab_cal[$i][$j], "*") !== false) ?
-                            '<span style="color: #aaaaaa; ">
-            ' . str_replace("*", "", $tab_cal[$i][$j]) . '
-             ' . $moic . '</span>' : $tab_cal[$i][$j]) . "
-             </td>";
-                }
-                echo "</tr>";
-                $semaine++;
-            }
             ?>
-        </table>
+        </div>
+
+
+        <div class="col-md-12 border text-center  p-4"><a class="btn btn-dark fw-bold"
+                                                          href="vumois.php?mois=<?= ($num_mois - 1 == 0) ? 12 : $num_mois - 1; ?>
+&amp;annee=<?= ($num_mois - 1 == 0) ? $num_an - 1 : $num_an; ?>"><</a>
+            <div class="btn btn-light w-25 fw-bold">&nbsp;&nbsp;<?php echo $tab_mois[$num_mois]; ?></div>
+            &nbsp;&nbsp;<a class="btn btn-dark fw-bold"
+                           href="vumois.php?mois=<?= ($num_mois + 1 >= 12) ? 1 : $num_mois + 1; ?>&amp;annee=<?= ($num_mois + 1 >= 12) ? $num_an + 1 : $num_an; ?>">></a>
+
+        </div>
+
+        <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;">
+            Semaines
+        </div>
+
+        <?php
+        foreach ($tab_jours as $row) {
+            ?>
+            <div class="col-md-1 fw-bold border p-4 text-center"
+                 style="width: 12.8571%;"><?= $row; ?></div>
+
+
+            <?php
+        }
+        ?>
+        <?php foreach ($tabsemaine as $key => $rowMois) { ?>
+
+            <?php foreach ($rowMois as $key => $rowSemaine) { ?>
+                <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;">
+                    <?= $key; ?>
+                </div>
+                <?php foreach ($rowSemaine as $key => $rowJour) { ?>
+                    <div class="col-md-1 fw-bold border p-4 text-center"
+                         style="width: 12.8571%;">
+                        <?= date('d', strtotime($rowJour)); ?> <?= $tab_mois[(int)date('m', strtotime($rowJour))]; ?>
+                    </div>
+                <?php } ?>
+            <?php } ?>
+            <?php
+        }
+        ?>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
