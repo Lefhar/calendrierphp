@@ -82,6 +82,18 @@ function hex2rgb($hex)
             border-radius: 5px;
         }
 
+        .Linkrdv {
+
+
+            --rouge: 255;
+            --vert: 255;
+            --bleu: 255;
+            background: rgb(var(--rouge), var(--vert), var(--bleu));
+            --luminosite: calc((var(--rouge) * 299 + var(--vert) * 587 + var(--bleu) * 114) / 1000);
+            --couleur: calc((var(--luminosite) - 128) * -255000);
+            color: rgb(var(--couleur), var(--couleur), var(--couleur));
+        }
+
     </style>
 </head>
 <body>
@@ -167,10 +179,14 @@ function hex2rgb($hex)
                             ?>
                             <div title="<?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?> à <?= $heurefin; ?> <?= $rowrdv['Nom_TypeEvenement']; ?>"
                                  class="badge rdv  eve<?= $rowrdv['Id_TypeEvenement']; ?>"
-                                 style="<?= hex2rgb($rowrdv['Couleur_TypeEvenement']); ?><?= ($diff->format('%h') > 0) ? 'height:' . ((int)$diff->format('%h') * 74) . 'px;' : '' ?>
+                                 style="<?= hex2rgb($rowrdv['Couleur_TypeEvenement']); ?>;<?= ($diff->format('%h') > 0) ? 'height:' . ((int)$diff->format('%h') * 74) . 'px;' : '' ?>
                                  <?= ($debut->format('i') > 0) ? 'margin-top:' . $debut->format('i') . 'px;' : '' ?> margin-left: <?= ($marginLeft > 0) ? $marginLeft * 128 : $marginLeft; ?>px; background-color: <?= $rowrdv['Couleur_TypeEvenement']; ?>;">
                                 <?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?>
                                 à <?= $heurefin; ?>  <?= (strlen($rowrdv['Objet_Evenement']) > 10) ? mb_substr($rowrdv['Objet_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Objet_Evenement']; ?>  <?= (strlen($rowrdv['Contenu_Evenement']) > 10) ? mb_substr($rowrdv['Contenu_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Contenu_Evenement']; ?>
+                                <a target="_blank" class="Linkrdv"
+                                   style="<?= hex2rgb($rowrdv['Couleur_TypeEvenement']); ?>; background-color: transparent;"
+                                   href="voirevenement.php?y=<?= (int)date('Y', strtotime($rowrdv['Datefin_Evenement'])); ?>&m=<?= (int)date('m', strtotime($rowrdv['Datefin_Evenement'])); ?>&d=<?= (int)date('d', strtotime($rowrdv['Datefin_Evenement'])); ?>">Voir
+                                    la journée</a>
                             </div>
                             <?php
                             $marginLeft++;

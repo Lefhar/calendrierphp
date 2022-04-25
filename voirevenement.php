@@ -69,6 +69,18 @@ function hex2rgb($hex)
             border-radius: 5px;
             display: block;
         }
+
+        .Linkrdv {
+
+
+            --rouge: 255;
+            --vert: 255;
+            --bleu: 255;
+            background: rgb(var(--rouge), var(--vert), var(--bleu));
+            --luminosite: calc((var(--rouge) * 299 + var(--vert) * 587 + var(--bleu) * 114) / 1000);
+            --couleur: calc((var(--luminosite) - 128) * -255000);
+            color: rgb(var(--couleur), var(--couleur), var(--couleur));
+        }
     </style>
 </head>
 <body>
@@ -97,7 +109,9 @@ function hex2rgb($hex)
                 <?= $rdv['Objet_Evenement']; ?> <?= $rdv['Contenu_Evenement']; ?> <?php
                 if (!empty($rdv['Url_Evenement'])) {
                     ?>
-                    <a href="<?= $rdv['Url_Evenement']; ?>" target="_blank"><?= $rdv['Url_Evenement']; ?></a>
+                    <a class="Linkrdv"
+                       style="<?= hex2rgb($rdv['Couleur_TypeEvenement']); ?>; background-color: transparent;"
+                       href="<?= $rdv['Url_Evenement']; ?>" target="_blank"><?= $rdv['Url_Evenement']; ?></a>
                 <?php } ?>
             </div>
             <?php

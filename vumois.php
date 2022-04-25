@@ -225,7 +225,7 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
                                         <div class="rdv fw-normal eve"
                                              style="<?= hex2rgb('#999999'); ?>; <?= ($marginTop > 0) ? 'margin-top:' . ($marginTop * 30) . 'px' : ''; ?>">
                                             Trop d'évenement <a target="_blank" class="text-primary"
-                                                                href="voirevenement.php?y=<?= (int)date('Y', strtotime($rowrdv['Datefin_Evenement'])); ?>&m=<?= (int)date('m', strtotime($rowrdv['Datefin_Evenement'])); ?>&d=<?= (int)date('d', strtotime($rowrdv['Datefin_Evenement'])); ?>">Voir
+                                                                href="voirevenement.php?y=<?= (int)date('Y', strtotime($rowJour)); ?>&m=<?= (int)date('m', strtotime($rowJour)); ?>&d=<?= (int)date('d', strtotime($rowJour)); ?>">Voir
                                                 la journée</a>
                                         </div>
                                         <?php
