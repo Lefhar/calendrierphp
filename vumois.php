@@ -87,11 +87,10 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
     }
 
 }
-//var_dump($tab_cal);
-var_dump($tabsemaine);
 ?>
 <html lang="fr">
-<head><title>Calendrier</title>
+<head>
+    <title>Calendrier</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -163,9 +162,10 @@ var_dump($tabsemaine);
 
             <?php foreach ($TypeEve as $key => $rowcheck) { ?>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="check<?= $key; ?>" checked value="yes">
+                    <input class="form-check-input" type="checkbox" id="check<?= $rowcheck['Id_TypeEvenement']; ?>"
+                           checked value="yes">
                     <label class="form-check-label"
-                           for="check<?= $key; ?>"><?= $rowcheck['Nom_TypeEvenement']; ?></label>
+                           for="check<?= $rowcheck['Id_TypeEvenement']; ?>"><?= $rowcheck['Nom_TypeEvenement']; ?></label>
 
                 </div>
                 <?php
@@ -219,13 +219,13 @@ var_dump($tabsemaine);
                             if (date('Y-m-d', strtotime($rowrdv['Datedebut_Evenement'])) <= $rowJour and date('Y-m-d', strtotime($rowrdv['Datefin_Evenement'])) >= $rowJour) { ?>
                                 <?php
 
-                                if ($marginTop <= 3 && $marginTop > 0) {
+                                if ($marginTop >= 2) {
                                     ?>
                                     <?php if ($NbrEve <= 0) { ?>
-                                        <div class="eve<?= $rowrdv['Id_TypeEvenement']; ?> rdv fw-normal"
+                                        <div class="rdv fw-normal eve"
                                              style="<?= hex2rgb('#999999'); ?>; <?= ($marginTop > 0) ? 'margin-top:' . ($marginTop * 30) . 'px' : ''; ?>">
-                                            Trop d'évenement <a class="text-primary"
-                                                                href="voirevenement.php?date=<?= $rowrdv['Datedebut_Evenement']; ?>">Voir
+                                            Trop d'évenement <a target="_blank" class="text-primary"
+                                                                href="voirevenement.php?y=<?= (int)date('Y', strtotime($rowrdv['Datefin_Evenement'])); ?>&m=<?= (int)date('m', strtotime($rowrdv['Datefin_Evenement'])); ?>&d=<?= (int)date('d', strtotime($rowrdv['Datefin_Evenement'])); ?>">Voir
                                                 la journée</a>
                                         </div>
                                         <?php
@@ -233,7 +233,7 @@ var_dump($tabsemaine);
                                     }
                                 } else {
                                     ?>
-                                    <div class="eve<?= $rowrdv['Id_TypeEvenement']; ?> rdv fw-normal"
+                                    <div class="rdv fw-normal eve<?= $rowrdv['Id_TypeEvenement']; ?>"
                                          style="<?= hex2rgb($rowrdv['Couleur_TypeEvenement']); ?>; <?= ($marginTop > 0) ? 'margin-top:' . ($marginTop * 30) . 'px' : ''; ?>">
                                         <?= $rowrdv['Nom_TypeEvenement']; ?>
                                         à <?= date('H:i', strtotime($rowrdv['Datedebut_Evenement'])); ?>
@@ -263,9 +263,9 @@ var_dump($tabsemaine);
 
     $(document).ready(function () {
         <?php foreach ($dateRdv as $key => $rowcheck) { ?>
-        $("input[id='check<?=$key;?>']").click(function () {
+        $("input[id='check<?=$rowcheck['Id_TypeEvenement'];?>']").click(function () {
 
-            if ($("input[id='check<?=$key;?>']:checked").val() == "yes") {
+            if ($("input[id='check<?=$rowcheck['Id_TypeEvenement'];?>']:checked").val() == "yes") {
                 let elems = document.getElementsByClassName('eve<?= $rowcheck['Id_TypeEvenement']; ?>');
                 for (var i = 0; i < elems.length; i += 1) {
                     elems[i].style.display = 'block';
