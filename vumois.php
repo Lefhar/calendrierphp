@@ -13,6 +13,25 @@ $dateRdv = $reqjour->fetchAll();
 $reqeve = $db->prepare('select * from typeevenement where Id_Client=? order by Nom_TypeEvenement asc');
 $reqeve->execute(array($idclient));
 $TypeEve = $reqeve->fetchAll();
+
+function hex2rgb($hex)
+{
+    $hex = str_replace("#", "", $hex);
+    if (strlen($hex) == 3) {
+        $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
+        $g = hexdec(substr($hex, 1, 1) . substr($hex, 1, 1));
+        $b = hexdec(substr($hex, 2, 1) . substr($hex, 2, 1));
+    } else {
+        $r = hexdec(substr($hex, 0, 2));
+        $g = hexdec(substr($hex, 2, 2));
+        $b = hexdec(substr($hex, 4, 2));
+    }
+    $rgb = '--rouge: ' . $r . '; --vert: ' . $g . '; --bleu: ' . $b . ';';
+
+    return $rgb;
+}
+
+
 // pour pas s'embeter a les calculer a l'affchage des fleches de navigation...
 if ($num_mois < 1) {
     $num_mois = 12;
@@ -77,6 +96,10 @@ var_dump($tabsemaine);
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+        .currentDay {
+            background-color: #c1bbbb;
+        }
+
         .calendar {
             line-height: 25px;
             min-height: 25px;
@@ -90,11 +113,31 @@ var_dump($tabsemaine);
         .jour {
             width: 45px;
         }
+
+        .rdv {
+            min-height: 20px;
+            width: 127px;
+            position: absolute;
+            white-space: normal;
+            text-align: left;
+            font-size: 0.9rem;
+            padding: 4px;
+            border: 1px solid #dee2e6 !important;
+            --rouge: 255;
+            --vert: 255;
+            --bleu: 255;
+            background: rgb(var(--rouge), var(--vert), var(--bleu));
+            --luminosite: calc((var(--rouge) * 299 + var(--vert) * 587 + var(--bleu) * 114) / 1000);
+            --couleur: calc((var(--luminosite) - 128) * -255000);
+            color: rgb(var(--couleur), var(--couleur), var(--couleur));
+            border-radius: 5px;
+            display: block;
+        }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="row">
+    <div class="row m-2">
         <div class="col-md-12 border text-center p-4">
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
                 <label class="btn btn-dark ">
@@ -157,14 +200,52 @@ var_dump($tabsemaine);
         ?>
         <?php foreach ($tabsemaine as $key => $rowMois) { ?>
 
-            <?php foreach ($rowMois as $key => $rowSemaine) { ?>
-                <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;">
+            <?php foreach ($rowMois as $key => $rowSemaine) {
+                ?>
+                <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;height: 150px;">
                     <?= $key; ?>
                 </div>
                 <?php foreach ($rowSemaine as $key => $rowJour) { ?>
-                    <div class="col-md-1 fw-bold border p-4 text-center"
-                         style="width: 12.8571%;">
-                        <?= date('d', strtotime($rowJour)); ?> <?= $tab_mois[(int)date('m', strtotime($rowJour))]; ?>
+                    <div class="col-md-1 fw-bold border <?= ($rowJour == date('Y-m-d')) ? 'currentDay' : ''; ?>"
+                         style="width: 12.8571%;height: 150px; ">
+                        <div class="date">
+                            <small> <?= (int)date('d', strtotime($rowJour)); ?> <?= (date('m', strtotime($rowJour)) != $num_mois) ? $tab_mois[(int)date('m', strtotime($rowJour))] : ''; ?></small>
+                        </div>
+                        <?php
+                        $marginTop = 0;
+                        $NbrEve = 0;
+                        foreach ($dateRdv as $rowrdv) {
+
+                            if (date('Y-m-d', strtotime($rowrdv['Datedebut_Evenement'])) <= $rowJour and date('Y-m-d', strtotime($rowrdv['Datefin_Evenement'])) >= $rowJour) { ?>
+                                <?php
+
+                                if ($marginTop <= 3 && $marginTop > 0) {
+                                    ?>
+                                    <?php if ($NbrEve <= 0) { ?>
+                                        <div class="eve<?= $rowrdv['Id_TypeEvenement']; ?> rdv fw-normal"
+                                             style="<?= hex2rgb('#999999'); ?>; <?= ($marginTop > 0) ? 'margin-top:' . ($marginTop * 30) . 'px' : ''; ?>">
+                                            Trop d'évenement <a class="text-primary"
+                                                                href="voirevenement.php?date=<?= $rowrdv['Datedebut_Evenement']; ?>">Voir
+                                                la journée</a>
+                                        </div>
+                                        <?php
+                                        $NbrEve++;
+                                    }
+                                } else {
+                                    ?>
+                                    <div class="eve<?= $rowrdv['Id_TypeEvenement']; ?> rdv fw-normal"
+                                         style="<?= hex2rgb($rowrdv['Couleur_TypeEvenement']); ?>; <?= ($marginTop > 0) ? 'margin-top:' . ($marginTop * 30) . 'px' : ''; ?>">
+                                        <?= $rowrdv['Nom_TypeEvenement']; ?>
+                                        à <?= date('H:i', strtotime($rowrdv['Datedebut_Evenement'])); ?>
+                                    </div>
+
+
+                                    <?php
+                                } ?>
+                                <?php
+                                $marginTop++;
+                            }
+                        } ?>
                     </div>
                 <?php } ?>
             <?php } ?>
@@ -176,6 +257,40 @@ var_dump($tabsemaine);
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script>
 
+    $(document).ready(function () {
+        <?php foreach ($dateRdv as $key => $rowcheck) { ?>
+        $("input[id='check<?=$key;?>']").click(function () {
+
+            if ($("input[id='check<?=$key;?>']:checked").val() == "yes") {
+                let elems = document.getElementsByClassName('eve<?= $rowcheck['Id_TypeEvenement']; ?>');
+                for (var i = 0; i < elems.length; i += 1) {
+                    elems[i].style.display = 'block';
+                }
+
+
+                //une case est coché dans les checkbox on désactive disabled sur le bouton delete_file
+                console.log('coché')
+            } else {
+                let elems = document.getElementsByClassName('eve<?= $rowcheck['Id_TypeEvenement']; ?>');
+                for (let i = 0; i < elems.length; i += 1) {
+                    elems[i].style.display = 'none';
+
+                }
+                console.log('non coché')
+
+
+            }
+
+        });
+
+        <?php
+        } ?>
+    });
+
+</script>
 </body>
 </html>

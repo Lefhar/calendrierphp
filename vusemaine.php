@@ -77,6 +77,7 @@ function hex2rgb($hex)
             --luminosite: calc((var(--rouge) * 299 + var(--vert) * 587 + var(--bleu) * 114) / 1000);
             --couleur: calc((var(--luminosite) - 128) * -255000);
             color: rgb(var(--couleur), var(--couleur), var(--couleur));
+            border-radius: 5px;
         }
 
     </style>
