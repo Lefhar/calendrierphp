@@ -66,9 +66,8 @@ function hex2rgb($hex)
 ?>
 <html lang="fr">
 <head><title>Calendrier</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/assets/css/planning.css" rel="stylesheet">
 
@@ -121,14 +120,14 @@ function hex2rgb($hex)
                 <?php
             } ?>
         </div>
-        <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;height: 50px;">
+        <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;">
             Heure
         </div>
         <?php
         foreach ($tabjour as $key => $row) {
             ?>
             <div class="col-md-1 fw-bold border p-4 text-center"
-                 style="width: 12.8571%;height: 50px;"><?= $tabjourLettre[$key]; ?> <?= date('d', strtotime($row)); ?></div>
+                 style="width: 12.8571%;"><?= $tabjourLettre[$key]; ?> <?= date('d', strtotime($row)); ?></div>
 
 
             <?php
@@ -142,13 +141,13 @@ function hex2rgb($hex)
             $heurefinTeste = $finH->format('H:i');
             ?>
 
-            <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;height: 100px;">
+            <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;">
                 <?= ($heure < 10) ? '0' . $heure : $heure; ?>H
             </div>
             <?php foreach ($tabjour as $key => $row) {
                 ?>
                 <div class="col-md-1 fw-bold border p-0"
-                     style="width: 12.8571%;height: 100px;">
+                     style="width: 12.8571%;">
 
                     <?php
                     $NbrEve = 0;
@@ -168,7 +167,7 @@ function hex2rgb($hex)
                                          style="background-color: #999999;
                                          <?= ($diff->format('%h') > 0) ? 'height:' . ((int)$diff->format('%h') * 74) . 'px;' : '' ?>
                                          <?= ($debut->format('i') > 0) ? 'margin-top:' . $debut->format('i') . 'px;' : '' ?> min-height: 70px;
-                                                 display: block;    z-index: 2;">
+                                                 display: block;    z-index: 1;">
                                         Trop d'événement <a target="_blank" class="Linkrdv bg-link"
                                                             href="voirevenement.php?y=<?= (int)date('Y', strtotime($row)); ?>&m=<?= (int)date('m', strtotime($row)); ?>&d=<?= (int)date('d', strtotime($row)); ?>">Voir
                                             la journée</a></div>

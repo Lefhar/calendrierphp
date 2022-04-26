@@ -62,8 +62,9 @@ function hex2rgb($hex)
 ?>
 <html lang="fr">
 <head><title>Calendrier</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/assets/css/planning.css" rel="stylesheet">
 
@@ -107,8 +108,8 @@ function hex2rgb($hex)
         </div>
 
 
-        <div class="col-md-2 border text-center fw-bold  p-4">Heures</div>
-        <div class="col-md-10 border  p-4">
+        <div class="col-md-2 border text-center fw-bold  p-4" style="height: 80px;">Heures</div>
+        <div class="col-md-10 border  p-4" style="height: 80px;">
             <div class="text-center p-10">
                 <a class="btn btn-dark fw-bold"
                    href="vujour.php?d=<?= (int)date('d', strtotime("-1 day", strtotime(date($year . '-' . $month . '-' . $day)))); ?>&amp;m=<?= (int)date('m', strtotime("-1 day", strtotime(date($year . '-' . $month . '-' . $day)))); ?>"><</a>
@@ -125,8 +126,10 @@ function hex2rgb($hex)
 
         for ($heure = 00; $heure < 24; $heure++) {
             ?>
-            <div class="col-md-2 border text-center fw-bold p-4"> <?= ($heure < 10) ? '0' . $heure : $heure; ?>H</div>
-            <div class="col-md-10 border p-0">
+            <div class="col-md-2 border text-center fw-bold p-4"
+                 style="height: 100px;"> <?= ($heure < 10) ? '0' . $heure : $heure; ?>H
+            </div>
+            <div class="col-md-10 border p-0" style="height: 100px;">
                 <?php
                 $debH = DateTime::createFromFormat('H:i', ($heure < 10) ? '0' . $heure . ':00' : $heure . ':00');
                 $finH = DateTime::createFromFormat('H:i', ($heure < 10) ? '0' . $heure . ':59' : $heure . ':59');
@@ -179,6 +182,10 @@ function hex2rgb($hex)
 </div>
 <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
 <script>
 
     $(document).ready(function () {

@@ -1,3 +1,63 @@
+.form-check {
+    display: block;
+    min-height: 1.5rem;
+    padding-left: 1.5em;
+    margin-bottom: 0.125rem;
+}
+
+.form-check-inline {
+    display: inline-block;
+    margin-right: 1rem;
+}
+
+.p-4 {
+    padding: 1.5rem !important;
+}
+
+.p-0 {
+    padding: 0 !important;
+}
+
+.m-2 {
+    margin: 0.5rem !important;
+}
+
+.col-md-1 {
+    flex: 0 0 auto;
+    width: 8.33333333%;
+}
+
+.text-light {
+    color: #f8f9fa !important;
+}
+
+.fw-bold {
+    font-weight: 700 !important;
+    font-size: 1.7rem;
+}
+
+.nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #0d6efd;
+    text-decoration: none;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+}
+
+.btn-dark {
+    color: #fff;
+    background-color: #212529;
+    border-color: #212529;
+}
+
+.border {
+    border: 1px solid #dee2e6 !important;
+}
+
+.w-25 {
+    width: 25% !important;
+}
+
 .mois {
     min-height: 20px;
 }
@@ -18,7 +78,7 @@
 .rdv {
     white-space: normal;
     text-align: left;
-    font-size: 0.9rem;
+    /*font-size: 0.9rem;*/
     font-weight: normal !important;
     border: 1px solid #dee2e6 !important;
     --rouge: 255;
@@ -30,11 +90,10 @@
     color: rgb(var(--couleur), var(--couleur), var(--couleur));
     border-radius: 5px;
     display: block;
+    z-index: 1;
 }
 
 .Linkrdv {
-
-
     --rouge: 255;
     --vert: 255;
     --bleu: 255;
@@ -42,8 +101,11 @@
     --luminosite: calc((var(--rouge) * 299 + var(--vert) * 587 + var(--bleu) * 114) / 1000);
     --couleur: calc((var(--luminosite) - 128) * -255000);
     color: rgb(var(--couleur), var(--couleur), var(--couleur));
+    text-decoration: underline;
 }
 
 .bg-link {
     background-color: transparent;
 }
+
+

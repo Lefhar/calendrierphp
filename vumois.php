@@ -101,8 +101,9 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
 <html lang="fr">
 <head>
     <title>Calendrier</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
     <link href="/assets/css/planning.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -129,7 +130,8 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
         <div class="col-md-12 border text-center  p-4"><a class="btn btn-dark fw-bold"
                                                           href="vumois.php?mois=<?= $num_mois; ?>&annee=<?= $num_an - 1; ?>"><</a>&nbsp;&nbsp;<?php echo $num_an; ?>
             &nbsp;&nbsp;
-            <a class="btn btn-dark" href="vumois.php?d=1&mois=<?= $num_mois; ?>&annee=<?php echo $num_an + 1; ?>">></a>
+            <a class="btn btn-dark fw-bold"
+               href="vumois.php?d=1&mois=<?= $num_mois; ?>&annee=<?php echo $num_an + 1; ?>">></a>
         </div>
         <div class="col-md-12 border text-center  p-4">
 
@@ -196,7 +198,7 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
                                     ?>
                                     <?php if ($NbrEve <= 0) { ?>
                                         <div class="mois rdv fw-normal eve"
-                                             style="background-color: #999999;">
+                                             style="background-color: #999999;z-index: 2">
                                             Trop d'événement <a target="_blank" class="Linkrdv bg-link"
                                                                 href="voirevenement.php?y=<?= (int)date('Y', strtotime($rowJour)); ?>&m=<?= (int)date('m', strtotime($rowJour)); ?>&d=<?= (int)date('d', strtotime($rowJour)); ?>">Voir
                                                 la journée</a>
@@ -232,11 +234,12 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
         ?>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
 <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
 <script>
 
 
