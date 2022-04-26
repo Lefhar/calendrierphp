@@ -23,7 +23,16 @@ if (empty($_GET['y'])) {
 $DateActuel = date('Y-m-d', strtotime($year . '-' . $month . '-' . $day));
 $reqjour = $db->prepare('select * from evenement join typeevenement t on evenement.Id_TypeEvenement = t.Id_TypeEvenement where DATE (Datedebut_Evenement)<=? and  DATE (Datefin_Evenement)>=?   and Id_Client=?');
 $reqjour->execute(array($DateActuel, $DateActuel, $idclient));
-$dateRdv = $reqjour->fetchAll();
+$dateEve = $reqjour->fetchAll();
+
+//on déclare un tableaux vide
+$dateRdv = array();
+//on analyse le tableau afin de changer le code couleur hex en RGB
+foreach ($dateEve as $key => $change) {
+    //on fait le replacement
+    $change['Couleur_TypeEvenement'] = str_replace($change['Couleur_TypeEvenement'], hex2rgb($change['Couleur_TypeEvenement']), $change['Couleur_TypeEvenement']);
+    $dateRdv[] = $change;
+}
 
 $reqeve = $db->prepare('select * from typeevenement where Id_Client=? order by Nom_TypeEvenement asc');
 $reqeve->execute(array($idclient));
@@ -51,37 +60,7 @@ function hex2rgb($hex)
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        .rdv {
-
-            white-space: normal;
-            text-align: left;
-            font-size: 0.9rem;
-            /*padding: 4px;*/
-            border: 1px solid #dee2e6 !important;
-            --rouge: 255;
-            --vert: 255;
-            --bleu: 255;
-            background: rgb(var(--rouge), var(--vert), var(--bleu));
-            --luminosite: calc((var(--rouge) * 299 + var(--vert) * 587 + var(--bleu) * 114) / 1000);
-            --couleur: calc((var(--luminosite) - 128) * -255000);
-            color: rgb(var(--couleur), var(--couleur), var(--couleur));
-            border-radius: 5px;
-            display: block;
-        }
-
-        .Linkrdv {
-
-
-            --rouge: 255;
-            --vert: 255;
-            --bleu: 255;
-            background: rgb(var(--rouge), var(--vert), var(--bleu));
-            --luminosite: calc((var(--rouge) * 299 + var(--vert) * 587 + var(--bleu) * 114) / 1000);
-            --couleur: calc((var(--luminosite) - 128) * -255000);
-            color: rgb(var(--couleur), var(--couleur), var(--couleur));
-        }
-    </style>
+    <link href="/assets/css/planning.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -103,14 +82,14 @@ function hex2rgb($hex)
         </div>
         <?php foreach ($dateRdv as $rdv) { ?>
             <div class="alert rdv eve<?= $rdv['Id_TypeEvenement']; ?>"
-                 style="<?= hex2rgb($rdv['Couleur_TypeEvenement']); ?>">
+                 style="<?= $rdv['Couleur_TypeEvenement']; ?>">
                 <?= $rdv['Nom_TypeEvenement']; ?> de <?= date('H:i', strtotime($rdv['Datedebut_Evenement'])); ?>
                 à <?= date('H:i', strtotime($rdv['Datefin_Evenement'])); ?>
                 <?= $rdv['Objet_Evenement']; ?> <?= $rdv['Contenu_Evenement']; ?> <?php
                 if (!empty($rdv['Url_Evenement'])) {
                     ?>
-                    <a class="Linkrdv"
-                       style="<?= hex2rgb($rdv['Couleur_TypeEvenement']); ?>; background-color: transparent;"
+                    <a class="Linkrdv bg-link"
+                       style="<?= $rdv['Couleur_TypeEvenement']; ?> "
                        href="<?= $rdv['Url_Evenement']; ?>" target="_blank"><?= $rdv['Url_Evenement']; ?></a>
                 <?php } ?>
             </div>

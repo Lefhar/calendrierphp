@@ -1,0 +1,49 @@
+.mois {
+    min-height: 20px;
+}
+
+.semaine, .jour {
+    min-height: 45px;
+    line-height: 1;
+}
+
+
+.semaine, .jour, .mois {
+    position: absolute;
+    padding: 4px;
+    width: 127px;
+    font-weight: 700 !important;
+}
+
+.rdv {
+    white-space: normal;
+    text-align: left;
+    font-size: 0.9rem;
+    font-weight: normal !important;
+    border: 1px solid #dee2e6 !important;
+    --rouge: 255;
+    --vert: 255;
+    --bleu: 255;
+    background: rgb(var(--rouge), var(--vert), var(--bleu));
+    --luminosite: calc((var(--rouge) * 299 + var(--vert) * 587 + var(--bleu) * 114) / 1000);
+    --couleur: calc((var(--luminosite) - 128) * -255000);
+    color: rgb(var(--couleur), var(--couleur), var(--couleur));
+    border-radius: 5px;
+    display: block;
+}
+
+.Linkrdv {
+
+
+    --rouge: 255;
+    --vert: 255;
+    --bleu: 255;
+    background: rgb(var(--rouge), var(--vert), var(--bleu));
+    --luminosite: calc((var(--rouge) * 299 + var(--vert) * 587 + var(--bleu) * 114) / 1000);
+    --couleur: calc((var(--luminosite) - 128) * -255000);
+    color: rgb(var(--couleur), var(--couleur), var(--couleur));
+}
+
+.bg-link {
+    background-color: transparent;
+}

@@ -8,7 +8,17 @@ if (!isset($_GET['annee'])) $num_an = date("Y"); else $num_an = $_GET['annee'];
 
 $reqjour = $db->prepare('select * from evenement join typeevenement t on evenement.Id_TypeEvenement = t.Id_TypeEvenement where MONTH(Datedebut_Evenement)=? and year (Datedebut_Evenement)=?  and Id_Client=?');
 $reqjour->execute(array($num_mois, $num_an, $idclient));
-$dateRdv = $reqjour->fetchAll();
+$dateEve = $reqjour->fetchAll();
+
+//on déclare un tableaux vide
+$dateRdv = array();
+//on analyse le tableau afin de changer le code couleur hex en RGB
+foreach ($dateEve as $key => $change) {
+    //on fait le replacement
+    $change['Couleur_TypeEvenement'] = str_replace($change['Couleur_TypeEvenement'], hex2rgb($change['Couleur_TypeEvenement']), $change['Couleur_TypeEvenement']);
+    $dateRdv[] = $change;
+}
+
 
 $reqeve = $db->prepare('select * from typeevenement where Id_Client=? order by Nom_TypeEvenement asc');
 $reqeve->execute(array($idclient));
@@ -93,46 +103,9 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
     <title>Calendrier</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="/assets/css/planning.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        .currentDay {
-            background-color: #c1bbbb;
-        }
 
-        .calendar {
-            line-height: 25px;
-            min-height: 25px;
-            height: 125px;
-        }
-
-        .semaine {
-            width: 25px !important;
-        }
-
-        .jour {
-            width: 45px;
-        }
-
-        .rdv {
-            min-height: 20px;
-            width: 127px;
-            position: absolute;
-            white-space: normal;
-            text-align: left;
-            font-size: 0.9rem;
-            padding: 4px;
-            border: 1px solid #dee2e6 !important;
-            --rouge: 255;
-            --vert: 255;
-            --bleu: 255;
-            background: rgb(var(--rouge), var(--vert), var(--bleu));
-            --luminosite: calc((var(--rouge) * 299 + var(--vert) * 587 + var(--bleu) * 114) / 1000);
-            --couleur: calc((var(--luminosite) - 128) * -255000);
-            color: rgb(var(--couleur), var(--couleur), var(--couleur));
-            border-radius: 5px;
-            display: block;
-        }
-    </style>
 </head>
 <body>
 <div class="container">
@@ -198,14 +171,14 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
             <?php
         }
         ?>
-        <?php foreach ($tabsemaine as $key => $rowMois) { ?>
+        <?php foreach ($tabsemaine as $rowMois) { ?>
 
             <?php foreach ($rowMois as $key => $rowSemaine) {
                 ?>
                 <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;height: 150px;">
                     <?= $key; ?>
                 </div>
-                <?php foreach ($rowSemaine as $key => $rowJour) { ?>
+                <?php foreach ($rowSemaine as $rowJour) { ?>
                     <div class="col-md-1 fw-bold border <?= ($rowJour == date('Y-m-d')) ? 'currentDay' : ''; ?>"
                          style="width: 12.8571%;height: 150px; ">
                         <div class="date">
@@ -222,9 +195,9 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
                                 if ($marginTop >= 2) {
                                     ?>
                                     <?php if ($NbrEve <= 0) { ?>
-                                        <div class="rdv fw-normal eve"
-                                             style="<?= hex2rgb('#999999'); ?>; <?= ($marginTop > 0) ? 'margin-top:' . ($marginTop * 30) . 'px' : ''; ?>">
-                                            Trop d'événement <a target="_blank" class="text-primary"
+                                        <div class="mois rdv fw-normal eve"
+                                             style="background-color: #999999;">
+                                            Trop d'événement <a target="_blank" class="Linkrdv bg-link"
                                                                 href="voirevenement.php?y=<?= (int)date('Y', strtotime($rowJour)); ?>&m=<?= (int)date('m', strtotime($rowJour)); ?>&d=<?= (int)date('d', strtotime($rowJour)); ?>">Voir
                                                 la journée</a>
                                         </div>
@@ -233,10 +206,15 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
                                     }
                                 } else {
                                     ?>
-                                    <div class="rdv fw-normal eve<?= $rowrdv['Id_TypeEvenement']; ?>"
-                                         style="<?= hex2rgb($rowrdv['Couleur_TypeEvenement']); ?>; <?= ($marginTop > 0) ? 'margin-top:' . ($marginTop * 30) . 'px' : ''; ?>">
+                                    <div class="mois rdv fw-normal eve<?= $rowrdv['Id_TypeEvenement']; ?> "
+                                         id="<?= $key; ?>"
+                                         style="<?= $rowrdv['Couleur_TypeEvenement']; ?>;">
                                         <?= $rowrdv['Nom_TypeEvenement']; ?>
-                                        à <?= date('H:i', strtotime($rowrdv['Datedebut_Evenement'])); ?>
+                                        à <?= date('H:i', strtotime($rowrdv['Datedebut_Evenement'])); ?> <a
+                                                target="_blank" style="<?= $rowrdv['Couleur_TypeEvenement']; ?>"
+                                                class="Linkrdv bg-link"
+                                                href="voirevenement.php?y=<?= (int)date('Y', strtotime($rowJour)); ?>&m=<?= (int)date('m', strtotime($rowJour)); ?>&d=<?= (int)date('d', strtotime($rowJour)); ?>">Voir
+                                            la journée</a>
                                     </div>
 
 
@@ -260,6 +238,7 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
 <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script>
+
 
     $(document).ready(function () {
         <?php foreach ($dateRdv as $key => $rowcheck) { ?>
@@ -289,6 +268,7 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
 
         <?php
         } ?>
+
     });
 
 </script>

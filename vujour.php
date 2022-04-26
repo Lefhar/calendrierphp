@@ -27,9 +27,18 @@ $jourLettre = $tabjourLettre[strftime("%u", strtotime(date($year . '-' . $month 
 
 $reqjour = $db->prepare('select * from evenement join typeevenement t on evenement.Id_TypeEvenement = t.Id_TypeEvenement where YEAR(Datedebut_Evenement)=? and MONTH(Datedebut_Evenement)=? and YEAR(Datefin_Evenement)=? and MONTH(Datefin_Evenement)=?  and Id_Client=?');
 $reqjour->execute(array($year, $month, $year, $month, $idclient));
-$dateRdv = $reqjour->fetchAll();
+$dateEve = $reqjour->fetchAll();
 
-$reqeve = $db->prepare('select * from typeevenement where Id_Client=? order by Nom_TypeEvenement asc');
+//on déclare un tableaux vide
+$dateRdv = array();
+//on analyse le tableau afin de changer le code couleur hex en RGB
+foreach ($dateEve as $key => $change) {
+    //on fait le replacement
+    $change['Couleur_TypeEvenement'] = str_replace($change['Couleur_TypeEvenement'], hex2rgb($change['Couleur_TypeEvenement']), $change['Couleur_TypeEvenement']);
+    $dateRdv[] = $change;
+}
+
+$reqeve = $db->prepare('select * from typeevenement where Id_Client=? order by Nom_TypeEvenement ');
 $reqeve->execute(array($idclient));
 $TypeEve = $reqeve->fetchAll();
 
@@ -56,45 +65,8 @@ function hex2rgb($hex)
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        .calendar {
-            line-height: 25px;
-            min-height: 25px;
-            height: 125px;
-        }
+    <link href="/assets/css/planning.css" rel="stylesheet">
 
-
-        .rdv {
-            min-height: 45px;
-            width: 127px;
-            position: absolute;
-            white-space: normal;
-            text-align: left;
-            padding: 4px;
-            border: 1px solid #dee2e6 !important;
-            --rouge: 255;
-            --vert: 255;
-            --bleu: 255;
-            background: rgb(var(--rouge), var(--vert), var(--bleu));
-            --luminosite: calc((var(--rouge) * 299 + var(--vert) * 587 + var(--bleu) * 114) / 1000);
-            --couleur: calc((var(--luminosite) - 128) * -255000);
-            color: rgb(var(--couleur), var(--couleur), var(--couleur));
-            border-radius: 5px;
-        }
-
-        .Linkrdv {
-
-
-            --rouge: 255;
-            --vert: 255;
-            --bleu: 255;
-            background: rgb(var(--rouge), var(--vert), var(--bleu));
-            --luminosite: calc((var(--rouge) * 299 + var(--vert) * 587 + var(--bleu) * 114) / 1000);
-            --couleur: calc((var(--luminosite) - 128) * -255000);
-            color: rgb(var(--couleur), var(--couleur), var(--couleur));
-        }
-
-    </style>
 </head>
 <body>
 <div class="container">
@@ -178,14 +150,14 @@ function hex2rgb($hex)
                         if ($heuredebut >= $heuredebutTeste and $heuredebut <= $heurefinTeste) {
                             ?>
                             <div title="<?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?> à <?= $heurefin; ?> <?= $rowrdv['Nom_TypeEvenement']; ?>"
-                                 class="badge rdv  eve<?= $rowrdv['Id_TypeEvenement']; ?>"
-                                 style="<?= hex2rgb($rowrdv['Couleur_TypeEvenement']); ?>;<?= ($diff->format('%h') > 0) ? 'height:' . ((int)$diff->format('%h') * 74) . 'px;' : '' ?>
+                                 class="jour rdv  eve<?= $rowrdv['Id_TypeEvenement']; ?>"
+                                 style="<?= $rowrdv['Couleur_TypeEvenement']; ?> <?= ($diff->format('%h') > 0) ? 'height:' . ((int)$diff->format('%h') * 74) . 'px;' : '' ?>
                                  <?= ($debut->format('i') > 0) ? 'margin-top:' . $debut->format('i') . 'px;' : '' ?> margin-left: <?= ($marginLeft > 0) ? $marginLeft * 128 : $marginLeft; ?>px; background-color: <?= $rowrdv['Couleur_TypeEvenement']; ?>;">
                                 <?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?>
                                 à <?= $heurefin; ?>  <?= (strlen($rowrdv['Objet_Evenement']) > 10) ? mb_substr($rowrdv['Objet_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Objet_Evenement']; ?>  <?= (strlen($rowrdv['Contenu_Evenement']) > 10) ? mb_substr($rowrdv['Contenu_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Contenu_Evenement']; ?>
-                                <a target="_blank" class="Linkrdv"
-                                   style="<?= hex2rgb($rowrdv['Couleur_TypeEvenement']); ?>; background-color: transparent;"
-                                   href="voirevenement.php?y=<?= (int)date('Y', strtotime($rowrdv['Datefin_Evenement'])); ?>&m=<?= (int)date('m', strtotime($rowrdv['Datefin_Evenement'])); ?>&d=<?= (int)date('d', strtotime($rowrdv['Datefin_Evenement'])); ?>">Voir
+                                <a target="_blank" class="Linkrdv bg-link"
+                                   style="<?= $rowrdv['Couleur_TypeEvenement']; ?>;"
+                                   href="voirevenement.php?y=<?= (int)$year; ?>&m=<?= (int)$month; ?>&d=<?= (int)$day; ?>">Voir
                                     la journée</a>
                             </div>
                             <?php
