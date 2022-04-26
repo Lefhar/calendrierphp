@@ -80,6 +80,17 @@ function hex2rgb($hex)
             border-radius: 5px;
         }
 
+        .Linkrdv {
+
+
+            --rouge: 255;
+            --vert: 255;
+            --bleu: 255;
+            background: rgb(var(--rouge), var(--vert), var(--bleu));
+            --luminosite: calc((var(--rouge) * 299 + var(--vert) * 587 + var(--bleu) * 114) / 1000);
+            --couleur: calc((var(--luminosite) - 128) * -255000);
+            color: rgb(var(--couleur), var(--couleur), var(--couleur));
+        }
     </style>
 </head>
 <body>
@@ -160,7 +171,7 @@ function hex2rgb($hex)
                      style="width: 12.8571%;">
 
                     <?php
-
+                    $NbrEve = 0;
                     foreach ($dateRdv as $rowrdv) {
                         $debut = DateTime::createFromFormat('Y-m-d H:i:s', $rowrdv['Datedebut_Evenement']);
                         $fin = DateTime::createFromFormat('Y-m-d H:i:s', $rowrdv['Datefin_Evenement']);
@@ -169,17 +180,35 @@ function hex2rgb($hex)
                         $heurefin = $fin->format('H:i');
                         if (date('Y-m-d', strtotime($rowrdv['Datedebut_Evenement'])) <= $row and date('Y-m-d', strtotime($rowrdv['Datefin_Evenement'])) >= $row) {
 
-                            if ($heuredebut >= $heuredebutTeste and $heuredebut <= $heurefinTeste) { ?>
-                                <div title="<?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?> à <?= $heurefin; ?> <?= $rowrdv['Nom_TypeEvenement']; ?>"
-                                     class="badge rdv  eve<?= $rowrdv['Id_TypeEvenement']; ?>"
-                                     style="<?= hex2rgb($rowrdv['Couleur_TypeEvenement']); ?>
-                                     <?= ($diff->format('%h') > 0) ? 'height:' . ((int)$diff->format('%h') * 74) . 'px;' : '' ?>
-                                     <?= ($debut->format('i') > 0) ? 'margin-top:' . $debut->format('i') . 'px;' : '' ?>
-                                             background-color: <?= $rowrdv['Couleur_TypeEvenement']; ?>; display: block;">
-                                    <?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?>
-                                    à <?= $heurefin; ?>  <?= (strlen($rowrdv['Objet_Evenement']) > 10) ? mb_substr($rowrdv['Objet_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Objet_Evenement']; ?>  <?= (strlen($rowrdv['Contenu_Evenement']) > 10) ? mb_substr($rowrdv['Contenu_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Contenu_Evenement']; ?>
-                                </div>
-                                <?php
+                            if ($heuredebut >= $heuredebutTeste and $heuredebut <= $heurefinTeste) {
+                                if ($NbrEve > 0) {
+                                    ?>
+                                    <div title="<?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?> à <?= $heurefin; ?> <?= $rowrdv['Nom_TypeEvenement']; ?>"
+                                         class="badge rdv  eve<?= $rowrdv['Id_TypeEvenement']; ?>"
+                                         style="<?= hex2rgb('#999999'); ?>
+                                         <?= ($diff->format('%h') > 0) ? 'height:' . ((int)$diff->format('%h') * 74) . 'px;' : '' ?>
+                                         <?= ($debut->format('i') > 0) ? 'margin-top:' . $debut->format('i') . 'px;' : '' ?>
+                                                 display: block;    z-index: 1;">
+                                        Trop d'événement <a target="_blank" class="text-primary"
+                                                            href="voirevenement.php?y=<?= (int)date('Y', strtotime($row)); ?>&m=<?= (int)date('m', strtotime($row)); ?>&d=<?= (int)date('d', strtotime($row)); ?>">Voir
+                                            la journée</a></div>
+
+                                    <?php
+
+                                } else {
+                                    ?>
+                                    <div title="<?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?> à <?= $heurefin; ?> <?= $rowrdv['Nom_TypeEvenement']; ?>"
+                                         class="badge rdv  eve<?= $rowrdv['Id_TypeEvenement']; ?>"
+                                         style="<?= hex2rgb($rowrdv['Couleur_TypeEvenement']); ?>
+                                         <?= ($diff->format('%h') > 0) ? 'height:' . ((int)$diff->format('%h') * 74) . 'px;' : '' ?>
+                                         <?= ($debut->format('i') > 0) ? 'margin-top:' . $debut->format('i') . 'px;' : '' ?>
+                                                 background-color: <?= $rowrdv['Couleur_TypeEvenement']; ?>; display: block;">
+                                        <?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?>
+                                        à <?= $heurefin; ?>  <?= (strlen($rowrdv['Objet_Evenement']) > 10) ? mb_substr($rowrdv['Objet_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Objet_Evenement']; ?>  <?= (strlen($rowrdv['Contenu_Evenement']) > 10) ? mb_substr($rowrdv['Contenu_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Contenu_Evenement']; ?>
+                                    </div>
+                                    <?php
+                                }
+                                $NbrEve++;
                             }
                         }
                     }
