@@ -74,7 +74,7 @@ function hex2rgb($hex)
     <div class="row">
 
         <div class="col-md-12 border text-center p-4">
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <div class="btn-group btn-group-toggle">
                 <label class="btn btn-info active">
                     <a class="nav-link text-light fw-bold" href="#">Jour</a>
                 </label>
@@ -219,16 +219,5 @@ function hex2rgb($hex)
     });
 
 </script>
-
-<!--    <div class="form-check form-check-inline">-->
-<!--        <input class="form-check-input" type="checkbox" id="check--><? //= $key; ?><!--" checked>-->
-<!--        <label class="form-check-label"-->
-<!--               for="check--><? //= $key; ?><!--">--><? //= $rowcheck['Nom_TypeEvenement']; ?><!--</label>-->
-<!---->
-<!--    </div>-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-
 </body>
 </html>

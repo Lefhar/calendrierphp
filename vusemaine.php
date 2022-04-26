@@ -77,7 +77,7 @@ function hex2rgb($hex)
 <div class="container">
     <div class="row">
         <div class="col-md-12 border text-center p-4">
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <div class="btn-group btn-group-toggle">
                 <label class="btn btn-dark ">
                     <a class="nav-link text-light fw-bold"
                        href="vujour.php?d=<?= (int)date('d', strtotime(date($dateLundi))); ?>&y=<?= $year; ?>&m=<?= (int)date('m', strtotime($dateLundi)); ?>">Jour</a>

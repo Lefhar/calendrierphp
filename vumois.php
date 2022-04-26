@@ -112,7 +112,7 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
 <div class="container">
     <div class="row m-2">
         <div class="col-md-12 border text-center p-4">
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <div class="btn-group btn-group-toggle">
                 <label class="btn btn-dark ">
                     <a class="nav-link text-light fw-bold" href="vujour.php?d=1&m=<?= $num_mois; ?>&y=<?= $num_an; ?>">Jour</a>
                 </label>
