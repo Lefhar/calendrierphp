@@ -142,13 +142,13 @@ function hex2rgb($hex)
             $heurefinTeste = $finH->format('H:i');
             ?>
 
-            <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;height: 100px;">
+            <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;height: 74px;">
                 <?= ($heure < 10) ? '0' . $heure : $heure; ?>H
             </div>
             <?php foreach ($tabjour as $key => $row) {
                 ?>
                 <div class="col-md-1 fw-bold border p-0"
-                     style="width: 12.8571%;height: 100px;">
+                     style="width: 12.8571%;height: 74px;">
 
                     <?php
                     $NbrEve = 0;
