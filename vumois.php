@@ -135,6 +135,14 @@ foreach ($dateEve as $key => $change) {
             <a class="btn btn-dark fw-bold"
                href="vumois.php?d=1&mois=<?= $num_mois; ?>&annee=<?php echo $num_an + 1; ?>">></a>
         </div>
+        <div class="col-md-12 border text-center  p-4"><a class="btn btn-dark fw-bold"
+                                                          href="vumois.php?mois=<?= ($num_mois - 1 == 0) ? 12 : $num_mois - 1; ?>
+&amp;annee=<?= ($num_mois - 1 == 0) ? $num_an - 1 : $num_an; ?>"><</a>
+            <div class="btn btn-light w-25 fw-bold">&nbsp;&nbsp;<?php echo $tab_mois[$num_mois]; ?></div>
+            &nbsp;&nbsp;<a class="btn btn-dark fw-bold"
+                           href="vumois.php?mois=<?= ($num_mois + 1 >= 12) ? 1 : $num_mois + 1; ?>&amp;annee=<?= ($num_mois + 1 >= 12) ? $num_an + 1 : $num_an; ?>">></a>
+
+        </div>
         <div class="col-md-12 border text-center  p-4">
 
             <?php foreach ($TypeEve as $key => $rowcheck) { ?>
@@ -152,14 +160,7 @@ foreach ($dateEve as $key => $change) {
         </div>
 
 
-        <div class="col-md-12 border text-center  p-4"><a class="btn btn-dark fw-bold"
-                                                          href="vumois.php?mois=<?= ($num_mois - 1 == 0) ? 12 : $num_mois - 1; ?>
-&amp;annee=<?= ($num_mois - 1 == 0) ? $num_an - 1 : $num_an; ?>"><</a>
-            <div class="btn btn-light w-25 fw-bold">&nbsp;&nbsp;<?php echo $tab_mois[$num_mois]; ?></div>
-            &nbsp;&nbsp;<a class="btn btn-dark fw-bold"
-                           href="vumois.php?mois=<?= ($num_mois + 1 >= 12) ? 1 : $num_mois + 1; ?>&amp;annee=<?= ($num_mois + 1 >= 12) ? $num_an + 1 : $num_an; ?>">></a>
 
-        </div>
 
         <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;">
             Semaines
