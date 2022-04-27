@@ -186,6 +186,7 @@ function hex2rgb($hex)
                                     <div class="jour rdv fw-normal eve"
                                          style="background-color: #999999;z-index: 2; height: 100px;left: 79%;">
                                         Trop d'événement <a target="_blank" class="Linkrdv bg-link"
+                                                            style="<?= $rowrdv['Couleur_TypeEvenement']; ?>;"
                                                             href="voirevenement.php?y=<?= (int)date('Y', strtotime($year)); ?>&m=<?= (int)date('m', strtotime($month)); ?>&d=<?= (int)date('d', strtotime($day)); ?>">Voir
                                             la journée</a>
                                     </div>

@@ -180,6 +180,7 @@ function hex2rgb($hex)
                                          <?= ($debut->format('i') > 0) ? 'margin-top:' . $debut->format('i') . 'px;' : '' ?> min-height: 70px;
                                                  display: block;    z-index: 2;">
                                         Trop d'événement <a target="_blank" class="Linkrdv bg-link"
+                                                            style="<?= $rowrdv['Couleur_TypeEvenement']; ?>;"
                                                             href="voirevenement.php?y=<?= (int)date('Y', strtotime($row)); ?>&m=<?= (int)date('m', strtotime($row)); ?>&d=<?= (int)date('d', strtotime($row)); ?>">Voir
                                             la journée</a></div>
 
@@ -196,6 +197,7 @@ function hex2rgb($hex)
                                         <?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?>
                                         à <?= $heurefin; ?>  <?= (strlen($rowrdv['Objet_Evenement']) > 10) ? mb_substr($rowrdv['Objet_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Objet_Evenement']; ?>  <?= (strlen($rowrdv['Contenu_Evenement']) > 10) ? mb_substr($rowrdv['Contenu_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Contenu_Evenement']; ?>
                                         <a target="_blank" class="Linkrdv bg-link"
+                                           style="<?= $rowrdv['Couleur_TypeEvenement']; ?>;"
                                            href="voirevenement.php?y=<?= (int)date('Y', strtotime($row)); ?>&m=<?= (int)date('m', strtotime($row)); ?>&d=<?= (int)date('d', strtotime($row)); ?>">Voir
                                             la journée</a>
                                     </div>
