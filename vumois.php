@@ -7,10 +7,6 @@ if (!isset($_GET['mois'])) $num_mois = date("n"); else $num_mois = $_GET['mois']
 if (!isset($_GET['annee'])) $num_an = date("Y"); else $num_an = $_GET['annee'];
 
 
-
-
-
-
 $reqeve = $db->prepare('select * from typeevenement where Id_Client=? order by Nom_TypeEvenement asc');
 $reqeve->execute(array($idclient));
 $TypeEve = $reqeve->fetchAll();
@@ -187,14 +183,13 @@ foreach ($dateEve as $key => $change) {
                     <?= $key; ?>
                 </div>
                 <?php foreach ($rowSemaine as $rowJour) { ?>
-                    <div class="col-md-1 fw-bold border <?= ($rowJour == date('Y-m-d')) ? 'currentDay' : ''; ?>"
+                    <div class="col-md-1 fw-bold border <?= ($rowJour == date('Y-m-d')) ? 'currentDay' : ''; ?> p-1"
                          style="width: 12.8571%;height: 150px; ">
                         <div class="date">
                             <a href="vujour.php?d=<?= (int)date('d', strtotime($rowJour)); ?>&m=<?= (int)date('m', strtotime($rowJour)); ?>&y=<?= (int)date('Y', strtotime($rowJour)); ?>"
                                class="text-dark"><small><?= (int)date('d', strtotime($rowJour)); ?> <?= (date('m', strtotime($rowJour)) != $num_mois) ? $tab_mois[(int)date('m', strtotime($rowJour))] : ''; ?>
                             </a>
-                            <a href="nouveau_rdv.php?m=<?= (int)date('m', strtotime($rowJour)); ?>&y=<?= (int)date('Y', strtotime($rowJour)); ?>&d=<?= (int)date('d', strtotime($rowJour)); ?>">+
-                                Evénement</a></small>
+                            <a href="nouveau_rdv.php?m=<?= (int)date('m', strtotime($rowJour)); ?>&y=<?= (int)date('Y', strtotime($rowJour)); ?>&d=<?= (int)date('d', strtotime($rowJour)); ?>">+Evénement</a></small>
                         </div>
                         <?php
                         $marginTop = 0;
