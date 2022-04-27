@@ -93,7 +93,7 @@ function hex2rgb($hex)
                                                           href="vujour.php?d=<?= (int)$day; ?>&m=<?= (int)$month; ?>&y=<?= $year - 1; ?>"><</a>&nbsp;<div
                     class="btn btn-light w-25 fw-bold"><?php echo $year; ?></div>
             &nbsp;&nbsp;
-            <a class="btn btn-dark"
+            <a class="btn btn-dark fw-bold"
                href="vujour.php?d=<?= (int)$day; ?>&m=<?= (int)$month; ?>&y=<?php echo $year + 1; ?>">></a>
         </div>
         <div class="col-md-12 border text-center  p-4">
