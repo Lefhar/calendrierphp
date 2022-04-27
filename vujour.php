@@ -144,8 +144,9 @@ function hex2rgb($hex)
                 $heuredebutTeste = $debH->format('H:i');
                 $heurefinTeste = $finH->format('H:i');
                 $iteration = 0;
-                foreach ($dateRdv as $rowrdv) {
+                $NbrEve = 0;
 
+                foreach ($dateRdv as $rowrdv) {
                     $debut = DateTime::createFromFormat('Y-m-d H:i:s', $rowrdv['Datedebut_Evenement']);
                     $fin = DateTime::createFromFormat('Y-m-d H:i:s', $rowrdv['Datefin_Evenement']);
                     $diff = $debut->diff($fin);
@@ -158,22 +159,45 @@ function hex2rgb($hex)
 
                     if (date('Y-m-d', strtotime($rowrdv['Datedebut_Evenement'])) <= $dateactuel->format('Y-m-d') and date('Y-m-d', strtotime($rowrdv['Datefin_Evenement'])) >= $dateactuel->format('Y-m-d')) {
                         if ($heuredebut >= $heuredebutTeste and $heuredebut <= $heurefinTeste) {
+
                             ?>
-                            <div title="<?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?> à <?= $heurefin; ?> <?= $rowrdv['Nom_TypeEvenement']; ?>"
-                                 class="jour rdv  eve<?= $rowrdv['Id_TypeEvenement']; ?>"
-                                 style="<?= $rowrdv['Couleur_TypeEvenement']; ?> <?= ($diff->format('%h') > 0) ? 'height:' . ((int)$diff->format('%h') * 74) . 'px;' : '' ?>
-                                 <?= ($debut->format('i') > 0) ? 'margin-top:' . $debut->format('i') . 'px;' : '' ?> margin-left: <?= ($marginLeft > 0) ? $marginLeft * 128 : $marginLeft; ?>px; background-color: <?= $rowrdv['Couleur_TypeEvenement']; ?>;">
-                                <?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?>
-                                à <?= $heurefin; ?>  <?= (strlen($rowrdv['Objet_Evenement']) > 10) ? mb_substr($rowrdv['Objet_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Objet_Evenement']; ?>  <?= (strlen($rowrdv['Contenu_Evenement']) > 10) ? mb_substr($rowrdv['Contenu_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Contenu_Evenement']; ?>
-                                <a target="_blank" class="Linkrdv bg-link"
-                                   style="<?= $rowrdv['Couleur_TypeEvenement']; ?>;"
-                                   href="voirevenement.php?y=<?= (int)$year; ?>&m=<?= (int)$month; ?>&d=<?= (int)$day; ?>">Voir
-                                    la journée</a>
-                            </div>
-                            <?php
+                            <?php if ($marginLeft <= 5) {
+
+                                ?>
+
+                                <div title="<?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?> à <?= $heurefin; ?> <?= $rowrdv['Nom_TypeEvenement']; ?>"
+                                     class="jour rdv  eve<?= $rowrdv['Id_TypeEvenement']; ?>"
+                                     style="<?= $rowrdv['Couleur_TypeEvenement']; ?> <?= ($diff->format('%h') > 0) ? 'height:' . ((int)$diff->format('%h') * 74) . 'px;' : '' ?>
+                                     <?= ($debut->format('i') > 0) ? 'margin-top:' . $debut->format('i') . 'px;' : '' ?> left: <?= ($marginLeft > 0) ? ($marginLeft * 13) : $marginLeft; ?>%; background-color: <?= $rowrdv['Couleur_TypeEvenement']; ?>;">
+                                    <?= $rowrdv['Nom_TypeEvenement']; ?> de <?= $heuredebut; ?>
+                                    à <?= $heurefin; ?>  <?= (strlen($rowrdv['Objet_Evenement']) > 10) ? mb_substr($rowrdv['Objet_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Objet_Evenement']; ?>  <?= (strlen($rowrdv['Contenu_Evenement']) > 10) ? mb_substr($rowrdv['Contenu_Evenement'], 0, 10, 'UTF-8') . '...' : $rowrdv['Contenu_Evenement']; ?>
+                                    <a target="_blank" class="Linkrdv bg-link"
+                                       style="<?= $rowrdv['Couleur_TypeEvenement']; ?>;"
+                                       href="voirevenement.php?y=<?= (int)$year; ?>&m=<?= (int)$month; ?>&d=<?= (int)$day; ?>">Voir
+                                        la journée</a><?= $marginLeft; ?> <?= $NbrEve; ?>
+                                </div>
+                                <?php
+                                $NbrEve++;
+
+                            } else {
+                                if ($NbrEve <= 0) {
+                                    ?>
+
+                                    <div class="jour rdv fw-normal eve"
+                                         style="background-color: #999999;z-index: 2; height: 100px;left: 79%;">
+                                        Trop d'événement <a target="_blank" class="Linkrdv bg-link"
+                                                            href="voirevenement.php?y=<?= (int)date('Y', strtotime($year)); ?>&m=<?= (int)date('m', strtotime($month)); ?>&d=<?= (int)date('d', strtotime($day)); ?>">Voir
+                                            la journée</a>
+                                    </div>
+                                    <?php
+
+                                }
+
+                            }
                             $marginLeft++;
 
                         }
+
                     }
                     ?>
 
