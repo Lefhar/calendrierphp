@@ -144,22 +144,17 @@ foreach ($dateEve as $key => $change) {
 
         </div>
         <div class="col-md-12 border text-center  p-4">
-
-            <?php foreach ($TypeEve as $key => $rowcheck) { ?>
-                <div class="form-check form-check-inline">
+            <div class="btn-group">
+                <?php foreach ($TypeEve as $key => $rowcheck) { ?>
                     <input class="form-check-input" type="checkbox" id="check<?= $rowcheck['Id_TypeEvenement']; ?>"
                            checked value="yes">
                     <label class="form-check-label"
                            for="check<?= $rowcheck['Id_TypeEvenement']; ?>"><?= $rowcheck['Nom_TypeEvenement']; ?></label>
+                    <?php
+                }
 
-                </div>
-                <?php
-            }
-
-            ?>
+                ?></div>
         </div>
-
-
 
 
         <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;">

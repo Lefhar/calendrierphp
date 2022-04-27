@@ -91,7 +91,7 @@ $rowSelect = $query->fetchAll();
             </div>
 
             <div class="form-group">
-                <label for="contenu">Url</label>
+                <label for="url">Url</label>
                 <input type="url" id="url" name="url" class="form-control">
             </div>
 
