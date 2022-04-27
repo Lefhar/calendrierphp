@@ -94,9 +94,10 @@ function hex2rgb($hex)
             </div>
         </div>
         <div class="col-md-12 border text-center  p-4"><a class="btn btn-dark fw-bold"
-                                                          href="vusemaine.php?w=1&y=<?= $year - 1; ?>"><</a>&nbsp;&nbsp;<?php echo $year; ?>
+                                                          href="vusemaine.php?w=1&y=<?= $year - 1; ?>"><</a>&nbsp;<div
+                    class="btn btn-light w-25 fw-bold"><?php echo $year; ?></div>
             &nbsp;&nbsp;
-            <a class="btn btn-dark" href="vusemaine.php?w=1&amp;y=<?php echo $year + 1; ?>">></a>
+            <a class="btn btn-dark" href="vusemaine.php?w=1&y=<?php echo $year + 1; ?>">></a>
         </div>
         <div class="col-md-12 border  p-4">
             <div class="text-center p-10">
@@ -221,8 +222,6 @@ function hex2rgb($hex)
         crossorigin="anonymous"></script>
 
 <script>
-
-
     $(document).ready(function () {
         <?php foreach ($TypeEve as $key => $rowcheck) { ?>
         $("input[id='check<?=$rowcheck['Id_TypeEvenement'];?>']").click(function () {

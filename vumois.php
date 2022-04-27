@@ -128,7 +128,8 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
             </div>
         </div>
         <div class="col-md-12 border text-center  p-4"><a class="btn btn-dark fw-bold"
-                                                          href="vumois.php?mois=<?= $num_mois; ?>&annee=<?= $num_an - 1; ?>"><</a>&nbsp;&nbsp;<?php echo $num_an; ?>
+                                                          href="vumois.php?mois=<?= (int)$num_mois; ?>&annee=<?= (int)$num_an - 1; ?>"><</a>&nbsp;&nbsp;<div
+                    class="btn btn-light w-25 fw-bold"><?php echo $num_an; ?></div>
             &nbsp;&nbsp;
             <a class="btn btn-dark fw-bold"
                href="vumois.php?d=1&mois=<?= $num_mois; ?>&annee=<?php echo $num_an + 1; ?>">></a>

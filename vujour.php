@@ -90,21 +90,26 @@ function hex2rgb($hex)
             </div>
         </div>
         <div class="col-md-12 border text-center  p-4"><a class="btn btn-dark fw-bold"
-                                                          href="vujour.php?d=<?= $day; ?>&m=<?= $month; ?>&y=<?= $year - 1; ?>"><</a>&nbsp;&nbsp;<?php echo $year; ?>
+                                                          href="vujour.php?d=<?= (int)$day; ?>&m=<?= (int)$month; ?>&y=<?= $year - 1; ?>"><</a>&nbsp;<div
+                    class="btn btn-light w-25 fw-bold"><?php echo $year; ?></div>
             &nbsp;&nbsp;
-            <a class="btn btn-dark" href="vujour.php?d=<?= $day; ?>&m=<?= $month; ?>&y=<?php echo $year + 1; ?>">></a>
+            <a class="btn btn-dark"
+               href="vujour.php?d=<?= (int)$day; ?>&m=<?= (int)$month; ?>&y=<?php echo $year + 1; ?>">></a>
         </div>
         <div class="col-md-12 border text-center  p-4">
 
-            <?php foreach ($dateRdv as $key => $rowcheck) { ?>
+            <?php foreach ($TypeEve as $key => $rowcheck) { ?>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="check<?= $key; ?>" checked value="yes">
+                    <input class="form-check-input" type="checkbox" id="check<?= $rowcheck['Id_TypeEvenement']; ?>"
+                           checked value="yes">
                     <label class="form-check-label"
-                           for="check<?= $key; ?>"><?= $rowcheck['Nom_TypeEvenement']; ?></label>
+                           for="check<?= $rowcheck['Id_TypeEvenement']; ?>"><?= $rowcheck['Nom_TypeEvenement']; ?></label>
 
                 </div>
                 <?php
-            } ?>
+            }
+
+            ?>
         </div>
 
 
@@ -189,12 +194,11 @@ function hex2rgb($hex)
         crossorigin="anonymous"></script>
 
 <script>
-
     $(document).ready(function () {
-        <?php foreach ($dateRdv as $key => $rowcheck) { ?>
-        $("input[id='check<?=$key;?>']").click(function () {
+        <?php foreach ($TypeEve as $key => $rowcheck) { ?>
+        $("input[id='check<?=$rowcheck['Id_TypeEvenement'];?>']").click(function () {
 
-            if ($("input[id='check<?=$key;?>']:checked").val() == "yes") {
+            if ($("input[id='check<?=$rowcheck['Id_TypeEvenement'];?>']:checked").val() == "yes") {
                 let elems = document.getElementsByClassName('eve<?= $rowcheck['Id_TypeEvenement']; ?>');
                 for (var i = 0; i < elems.length; i += 1) {
                     elems[i].style.display = 'block';
@@ -214,10 +218,12 @@ function hex2rgb($hex)
 
             }
 
+
         });
 
         <?php
         } ?>
+
     });
 
 </script>
