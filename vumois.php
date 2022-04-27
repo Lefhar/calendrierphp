@@ -6,18 +6,9 @@ $idclient = 1;
 if (!isset($_GET['mois'])) $num_mois = date("n"); else $num_mois = $_GET['mois'];
 if (!isset($_GET['annee'])) $num_an = date("Y"); else $num_an = $_GET['annee'];
 
-$reqjour = $db->prepare('select * from evenement join typeevenement t on evenement.Id_TypeEvenement = t.Id_TypeEvenement where MONTH(Datedebut_Evenement)=? and year (Datedebut_Evenement)=?  and Id_Client=?');
-$reqjour->execute(array($num_mois, $num_an, $idclient));
-$dateEve = $reqjour->fetchAll();
 
-//on déclare un tableaux vide
-$dateRdv = array();
-//on analyse le tableau afin de changer le code couleur hex en RGB
-foreach ($dateEve as $key => $change) {
-    //on fait le replacement
-    $change['Couleur_TypeEvenement'] = str_replace($change['Couleur_TypeEvenement'], hex2rgb($change['Couleur_TypeEvenement']), $change['Couleur_TypeEvenement']);
-    $dateRdv[] = $change;
-}
+
+
 
 
 $reqeve = $db->prepare('select * from typeevenement where Id_Client=? order by Nom_TypeEvenement asc');
@@ -84,6 +75,7 @@ $currentWeek = (int)date('W', strtotime($dateJour));
 
 $demare = date('Y-m-d', strtotime('last monday', strtotime($dateJour)));
 
+
 for ($ligne = 0; $ligne < 6; $ligne++) {
 
 
@@ -96,6 +88,21 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
 
     }
 
+}
+$debutreq = date('Y-m-d', strtotime('last monday', strtotime($dateJour)));
+$finreq = date("Y-m-d", strtotime($debutreq . '+ 42 days'));
+$reqjour = $db->prepare('select * from evenement join typeevenement t on evenement.Id_TypeEvenement = t.Id_TypeEvenement where date(Datedebut_Evenement)>=? and date(Datefin_Evenement)<=?  and Id_Client=?');
+$reqjour->execute(array($debutreq, $finreq, $idclient));
+$dateEve = $reqjour->fetchAll();
+$debutreq = date('Y-m-d', strtotime('last monday', strtotime($dateJour)));
+$finreq = date("Y-m-d", strtotime($debutreq . '+ 42 days'));
+//on déclare un tableaux vide
+$dateRdv = array();
+//on analyse le tableau afin de changer le code couleur hex en RGB
+foreach ($dateEve as $key => $change) {
+    //on fait le replacement
+    $change['Couleur_TypeEvenement'] = str_replace($change['Couleur_TypeEvenement'], hex2rgb($change['Couleur_TypeEvenement']), $change['Couleur_TypeEvenement']);
+    $dateRdv[] = $change;
 }
 ?>
 <html lang="fr">
@@ -265,10 +272,7 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
                 }
                 console.log('non coché')
 
-
             }
-
-
         });
         <?php
         } ?>

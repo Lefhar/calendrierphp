@@ -26,7 +26,7 @@ for ($i = 0; $i < 7; $i++) {
     $jour = date('Y-m-d', strtotime("+1 day", strtotime($jour)));
 
 }
-$reqjour = $db->prepare('select * from evenement join typeevenement t on evenement.Id_TypeEvenement = t.Id_TypeEvenement where date(Datedebut_Evenement)>=? and date(Datedebut_Evenement)<=?  and Id_Client=?');
+$reqjour = $db->prepare('select * from evenement join typeevenement t on evenement.Id_TypeEvenement = t.Id_TypeEvenement where date(Datedebut_Evenement)>=? and date(Datefin_Evenement)<=?  and Id_Client=?');
 $reqjour->execute(array($dateLundi, $dateVendredi, $idclient));
 $dateEve = $reqjour->fetchAll();
 

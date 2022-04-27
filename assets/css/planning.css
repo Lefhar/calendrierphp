@@ -91,6 +91,7 @@
     border-radius: 5px;
     display: block;
     z-index: 1;
+    font-size: 14px !important;
 }
 
 .Linkrdv {
@@ -108,3 +109,6 @@
     background-color: transparent;
 }
 
+.currentDay {
+    background-color: rgba(170, 170, 170, 0.48);
+}
