@@ -132,7 +132,9 @@ function hex2rgb($hex)
         foreach ($tabjour as $key => $row) {
             ?>
             <div class="col-md-1 fw-bold border p-4 text-center"
-                 style="width: 12.8571%;height: 70px;"><?= $tabjourLettre[$key]; ?> <?= date('d', strtotime($row)); ?>
+                 style="width: 12.8571%;height: 70px;"><a
+                        href="vujour.php?d=<?= (int)date('d', strtotime($row)); ?>&m=<?= (int)date('m', strtotime($row)); ?>&y=<?= (int)date('Y', strtotime($row)); ?>"
+                        class="text-dark"><?= $tabjourLettre[$key]; ?> <?= date('d', strtotime($row)); ?></a>
                 <br>
                 <a href="nouveau_rdv.php?m=<?= (int)date('m', strtotime($row)); ?>&y=<?= (int)date('Y', strtotime($row)); ?>&d=<?= (int)date('d', strtotime($row)); ?>">+
                     Evénement</a>

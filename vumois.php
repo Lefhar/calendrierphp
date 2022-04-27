@@ -190,9 +190,11 @@ foreach ($dateEve as $key => $change) {
                     <div class="col-md-1 fw-bold border <?= ($rowJour == date('Y-m-d')) ? 'currentDay' : ''; ?>"
                          style="width: 12.8571%;height: 150px; ">
                         <div class="date">
-                            <small> <?= (int)date('d', strtotime($rowJour)); ?> <?= (date('m', strtotime($rowJour)) != $num_mois) ? $tab_mois[(int)date('m', strtotime($rowJour))] : ''; ?>
-                                <a href="nouveau_rdv.php?m=<?= (int)date('m', strtotime($rowJour)); ?>&y=<?= (int)date('Y', strtotime($rowJour)); ?>&d=<?= (int)date('d', strtotime($rowJour)); ?>">+
-                                    Evénement</a></small>
+                            <a href="vujour.php?d=<?= (int)date('d', strtotime($rowJour)); ?>&m=<?= (int)date('m', strtotime($rowJour)); ?>&y=<?= (int)date('Y', strtotime($rowJour)); ?>"
+                               class="text-dark"><small><?= (int)date('d', strtotime($rowJour)); ?> <?= (date('m', strtotime($rowJour)) != $num_mois) ? $tab_mois[(int)date('m', strtotime($rowJour))] : ''; ?>
+                            </a>
+                            <a href="nouveau_rdv.php?m=<?= (int)date('m', strtotime($rowJour)); ?>&y=<?= (int)date('Y', strtotime($rowJour)); ?>&d=<?= (int)date('d', strtotime($rowJour)); ?>">+
+                                Evénement</a></small>
                         </div>
                         <?php
                         $marginTop = 0;
@@ -202,7 +204,7 @@ foreach ($dateEve as $key => $change) {
                             if (date('Y-m-d', strtotime($rowrdv['Datedebut_Evenement'])) <= $rowJour and date('Y-m-d', strtotime($rowrdv['Datefin_Evenement'])) >= $rowJour) { ?>
                                 <?php
 
-                                if ($marginTop >= 2) {
+                                if ($marginTop >= 1) {
                                     ?>
                                     <?php if ($NbrEve <= 0) { ?>
                                         <div class="mois rdv fw-normal eve"
