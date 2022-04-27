@@ -64,7 +64,7 @@ $rowSelect = $query->fetchAll();
                         type d'événement</a></label>
                 <?php if (!empty($rowSelect)){ ?>
                 <select name="type" id="type" class="form-control" required>
-                    <option>Séléctionnez un type d'événement</option>
+                    <option value="">Séléctionnez un type d'événement</option>
                     <?php foreach ($rowSelect as $typerdv) {
                         ?>
                         <option value="<?= $typerdv['Id_TypeEvenement']; ?>"><?= $typerdv['Nom_TypeEvenement']; ?></option>
