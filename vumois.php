@@ -184,7 +184,9 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
                     <div class="col-md-1 fw-bold border <?= ($rowJour == date('Y-m-d')) ? 'currentDay' : ''; ?>"
                          style="width: 12.8571%;height: 150px; ">
                         <div class="date">
-                            <small> <?= (int)date('d', strtotime($rowJour)); ?> <?= (date('m', strtotime($rowJour)) != $num_mois) ? $tab_mois[(int)date('m', strtotime($rowJour))] : ''; ?></small>
+                            <small> <?= (int)date('d', strtotime($rowJour)); ?> <?= (date('m', strtotime($rowJour)) != $num_mois) ? $tab_mois[(int)date('m', strtotime($rowJour))] : ''; ?>
+                                <a href="nouveau_rdv.php?m=<?= (int)date('m', strtotime($rowJour)); ?>&y=<?= (int)date('Y', strtotime($rowJour)); ?>&d=<?= (int)date('d', strtotime($rowJour)); ?>">+
+                                    Evénement</a></small>
                         </div>
                         <?php
                         $marginTop = 0;
@@ -244,7 +246,7 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
 
 
     $(document).ready(function () {
-        <?php foreach ($dateRdv as $key => $rowcheck) { ?>
+        <?php foreach ($TypeEve as $key => $rowcheck) { ?>
         $("input[id='check<?=$rowcheck['Id_TypeEvenement'];?>']").click(function () {
 
             if ($("input[id='check<?=$rowcheck['Id_TypeEvenement'];?>']:checked").val() == "yes") {
@@ -266,6 +268,7 @@ for ($ligne = 0; $ligne < 6; $ligne++) {
 
 
             }
+
 
         });
 

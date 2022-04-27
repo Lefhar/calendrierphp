@@ -1,6 +1,34 @@
 <?php
 include("db.php");
 $db = Database::connect();
+date_default_timezone_set('Europe/Paris');
+if (empty($_GET['d'])) {
+    $day = date('d', strtotime(date('Y-m-d H:i:s')));
+} else {
+    $day = ((int)$_GET['d'] < 10) ? '0' . (int)$_GET['d'] : (int)$_GET['d'];
+
+}
+if (empty($_GET['m'])) {
+    $month = date('m', strtotime(date('Y-m-d H:i:s')));
+} else {
+    $month = ((int)$_GET['m'] < 10) ? '0' . (int)$_GET['m'] : (int)$_GET['m'];
+
+}
+if (empty($_GET['y'])) {
+    $year = date('Y', strtotime(date('Y-m-d H:i:s')));
+} else {
+    $year = $_GET['y'];
+
+}
+if (empty($_GET['h'])) {
+    $hour = date('H', strtotime(date('Y-m-d H:i:s')));
+} else {
+    $hour = ((int)$_GET['h'] < 10) ? '0' . (int)$_GET['h'] : (int)$_GET['h'];
+
+
+}
+$dateActuel = date('Y-m-d\TH:i', strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':00'));
+echo $dateActuel;
 if (!empty($_POST)) {
     if (!empty($_POST['objet']) && !empty($_POST['contenu']) && !empty($_POST['type']) && !empty($_POST['debut']) && !empty($_POST['fin'])) {
 
@@ -80,12 +108,14 @@ $rowSelect = $query->fetchAll();
 
             <div class="form-group">
                 <label for="debut">Date de début</label>
-                <input type="datetime-local" id="debut" name="debut" class="form-control" required>
+                <input type="datetime-local" id="debut" name="debut" class="form-control" required
+                       value="<?= $dateActuel; ?>">
             </div>
 
             <div class="form-group">
                 <label for="fin">Date de fin</label>
-                <input type="datetime-local" id="fin" name="fin" class="form-control" required>
+                <input type="datetime-local" id="fin" name="fin" class="form-control" required
+                       value="<?= $dateActuel; ?>">
             </div>
 
             <div class="form-group mt-2">
@@ -95,5 +125,6 @@ $rowSelect = $query->fetchAll();
         </form>
     </div>
 </div>
+
 </body>
 </html>

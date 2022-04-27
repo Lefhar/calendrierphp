@@ -111,24 +111,31 @@ function hex2rgb($hex)
         </div>
         <div class="col-md-12 border text-center  p-4">
 
-            <?php foreach ($dateRdv as $key => $rowcheck) { ?>
+            <?php foreach ($TypeEve as $key => $rowcheck) { ?>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="check<?= $key; ?>" checked value="yes">
+                    <input class="form-check-input" type="checkbox" id="check<?= $rowcheck['Id_TypeEvenement']; ?>"
+                           checked value="yes">
                     <label class="form-check-label"
-                           for="check<?= $key; ?>"><?= $rowcheck['Nom_TypeEvenement']; ?></label>
+                           for="check<?= $rowcheck['Id_TypeEvenement']; ?>"><?= $rowcheck['Nom_TypeEvenement']; ?></label>
 
                 </div>
                 <?php
-            } ?>
+            }
+
+            ?>
         </div>
-        <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;height: 50px;">
+        <div class="col-md-1 fw-bold border p-4 text-center" style="width: 10%;height: 70px;">
             Heure
         </div>
         <?php
         foreach ($tabjour as $key => $row) {
             ?>
             <div class="col-md-1 fw-bold border p-4 text-center"
-                 style="width: 12.8571%;height: 50px;"><?= $tabjourLettre[$key]; ?> <?= date('d', strtotime($row)); ?></div>
+                 style="width: 12.8571%;height: 70px;"><?= $tabjourLettre[$key]; ?> <?= date('d', strtotime($row)); ?>
+                <br>
+                <a href="nouveau_rdv.php?m=<?= (int)date('m', strtotime($row)); ?>&y=<?= (int)date('Y', strtotime($row)); ?>&d=<?= (int)date('d', strtotime($row)); ?>">+
+                    Evénement</a>
+            </div>
 
 
             <?php
@@ -215,13 +222,14 @@ function hex2rgb($hex)
 
 <script>
 
-    $(document).ready(function () {
-        <?php foreach ($dateRdv as $key => $rowcheck) { ?>
-        $("input[id='check<?=$key;?>']").click(function () {
 
-            if ($("input[id='check<?=$key;?>']:checked").val() == "yes") {
-                const elems = document.getElementsByClassName('eve<?= $rowcheck['Id_TypeEvenement']; ?>');
-                for (let i = 0; i < elems.length; i += 1) {
+    $(document).ready(function () {
+        <?php foreach ($TypeEve as $key => $rowcheck) { ?>
+        $("input[id='check<?=$rowcheck['Id_TypeEvenement'];?>']").click(function () {
+
+            if ($("input[id='check<?=$rowcheck['Id_TypeEvenement'];?>']:checked").val() == "yes") {
+                let elems = document.getElementsByClassName('eve<?= $rowcheck['Id_TypeEvenement']; ?>');
+                for (var i = 0; i < elems.length; i += 1) {
                     elems[i].style.display = 'block';
                 }
 
@@ -239,10 +247,12 @@ function hex2rgb($hex)
 
             }
 
+
         });
 
         <?php
         } ?>
+
     });
 
 </script>
