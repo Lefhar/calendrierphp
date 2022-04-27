@@ -28,7 +28,6 @@ if (empty($_GET['h'])) {
 
 }
 $dateActuel = date('Y-m-d\TH:i', strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':00'));
-echo $dateActuel;
 if (!empty($_POST)) {
     if (!empty($_POST['objet']) && !empty($_POST['contenu']) && !empty($_POST['type']) && !empty($_POST['debut']) && !empty($_POST['fin'])) {
 
@@ -50,21 +49,11 @@ $rowSelect = $query->fetchAll();
 <html lang="fr">
 <head>
     <title>Nouveau Rdv</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        .calendar {
-            line-height: 25px;
-            min-height: 25px;
-            height: 125px;
-        }
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-
-        .heure {
-            width: 10% !important;
-        }
-    </style>
+    <link href="/assets/css/planning.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -72,7 +61,7 @@ $rowSelect = $query->fetchAll();
         <form action="" method="post">
             <div class="form-group">
                 <label for="type">Type d'événement <a href="nouveau_typeevenement.php">Ajouter un
-                        évenement</a></label>
+                        type d'événement</a></label>
                 <?php if (!empty($rowSelect)){ ?>
                 <select name="type" id="type" class="form-control" required>
                     <option>Séléctionnez un type d'événement</option>
@@ -125,6 +114,10 @@ $rowSelect = $query->fetchAll();
         </form>
     </div>
 </div>
-
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
 </body>
 </html>

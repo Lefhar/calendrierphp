@@ -127,7 +127,9 @@ function hex2rgb($hex)
         for ($heure = 00; $heure < 24; $heure++) {
             ?>
             <div class="col-md-2 border text-center fw-bold p-4"
-                 style="height: 74px;"> <?= ($heure < 10) ? '0' . $heure : $heure; ?>H
+                 style="height: 74px;"> <?= ($heure < 10) ? '0' . $heure : $heure; ?>H<br>
+                <a href="nouveau_rdv.php?m=<?= (int)date('m', strtotime(date($year . '-' . $month . '-' . $day))); ?>&y=<?= (int)date('Y', strtotime(date($year . '-' . $month . '-' . $day))); ?>&d=<?= (int)date('d', strtotime(date($year . '-' . $month . '-' . $day))); ?>&h=<?= $heure; ?>">+
+                    Evénement</a>
             </div>
             <div class="col-md-10 border p-0" style="height: 74px;">
                 <?php
