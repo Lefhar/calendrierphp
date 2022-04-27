@@ -251,9 +251,7 @@ function hex2rgb($hex)
 
         <?php
         } ?>
-
     });
-
 </script>
 
 </body>
